@@ -5,8 +5,10 @@
               <TopMenu/>
             </el-header>
             <el-container>
-                <el-aside :width="isAsideCollapse" class="aside"><TeacherMenu/></el-aside>
-                <el-main>Main</el-main>
+                <el-aside :width="isAsideCollapse" class="aside">
+                  <TeacherMenu v-if="user.role == 1"/>
+                </el-aside>
+                <el-main><router-view></router-view></el-main>
             </el-container>
         </el-container>
   </div>
@@ -20,8 +22,8 @@
 
     const collapseStore = useCollapseStore()
     const userStore = useUserStore()
-
-    const isAsideCollapse = computed(() => collapseStore.isCollapse ? "64px" : "200px")
+    const user = computed(() => userStore.user)
+    const isAsideCollapse = computed(() => collapseStore.isCollapse ? "64px" : "150px")
 
 
 </script>

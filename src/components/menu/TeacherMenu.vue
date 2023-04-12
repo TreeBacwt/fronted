@@ -3,14 +3,15 @@
 
         <el-menu
             id="aside"
-            default-active="userlist"
+            default-active="home/personalInformation"
             class="el-menu-vertical-demo emenu"
             :collapse="store.isCollapse"
             :collapse-transition="false"
+            :router="true"
         >
-            <el-menu-item index="userList">
+            <el-menu-item index="home/personalInformation">
                 <el-icon><user/></el-icon>
-                <template #title>用户列表</template>
+                <template #title>个人信息</template>
             </el-menu-item>
 
             <el-menu-item index="other1">
@@ -39,8 +40,14 @@
         Setting,
     } from '@element-plus/icons-vue'
     import { useCollapseStore } from '@/stores/collapse'
+    import { useRouter } from 'vue-router'
 
     const store = useCollapseStore()
+    const router = useRouter()
+
+    function handleItemClick(item) {
+        router.push({name: item.index})
+    }
 </script>
 <style scoped>  
     .menu, .el-menu{

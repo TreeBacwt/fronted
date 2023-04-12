@@ -9,4 +9,8 @@ export const useCollapseStore = defineStore('collapse', () => {
     }
 
     return { isCollapse, handleCollapse }
+}, {
+    persist: {
+        enabled: true
+    }
 })

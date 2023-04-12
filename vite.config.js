@@ -12,7 +12,7 @@ export default defineConfig({
     AutoImport({
       resolvers: [ElementPlusResolver()],
     }),
-  Components({
+    Components({
       resolvers: [ElementPlusResolver()],
     }),
   ],

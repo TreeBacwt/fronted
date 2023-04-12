@@ -2,12 +2,15 @@
     <div style="height:100%">
         <el-container>
             <el-header id="header">
-              <!-- <el-icon :size="40" class="collapse"><expand/></el-icon> -->
               <TopMenu/>
             </el-header>
             <el-container>
-                <el-aside :width="isAsideCollapse" class="aside"><TeacherMenu/></el-aside>
-                <el-main>Main</el-main>
+                <el-aside :width="isAsideCollapse" class="aside">
+                  <TeacherMenu v-if="user.role == 1"/>
+                </el-aside>
+                <el-main>
+                  <PersonalInformation/>
+                </el-main>
             </el-container>
         </el-container>
   </div>
@@ -15,12 +18,16 @@
 <script lang="ts" setup>
     import TeacherMenu from '@/components/menu/TeacherMenu.vue'
     import TopMenu from '@/components/menu/TopMenu.vue'
+    import PersonalInformation from '@/components/display/PersonalInformation.vue'
     import { reactive, ref, computed } from 'vue'
     import { useCollapseStore } from '@/stores/collapse'
+    import { useUserStore } from '@/stores/user'
 
     const collapseStore = useCollapseStore()
+    const userStore = useUserStore()
+    const user = computed(() => userStore.user)
 
-    const isAsideCollapse = computed(() => collapseStore.isCollapse ? "64px" : "200px")
+    const isAsideCollapse = computed(() => collapseStore.isCollapse ? "64px" : "150px")
 
 
 </script>
