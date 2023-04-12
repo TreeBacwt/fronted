@@ -1,9 +1,12 @@
 <template>
     <div style="height:100%">
         <el-container>
-            <el-header><el-icon><expand/></el-icon></el-header>
+            <el-header id="header">
+              <!-- <el-icon :size="40" class="collapse"><expand/></el-icon> -->
+              <TopMenu/>
+            </el-header>
             <el-container>
-                <el-aside width="200px"><TeacherMenu :isCollapse="isCollapse"/></el-aside>
+                <el-aside :width="isAsideCollapse" class="aside"><TeacherMenu/></el-aside>
                 <el-main>Main</el-main>
             </el-container>
         </el-container>
@@ -11,13 +14,20 @@
 </template>
 <script lang="ts" setup>
     import TeacherMenu from '@/components/menu/TeacherMenu.vue'
-    import { reactive, ref } from 'vue'
-    import { Fold, Expand } from '@element-plus/icons-vue'
+    import TopMenu from '@/components/menu/TopMenu.vue'
+    import { reactive, ref, computed } from 'vue'
+    import { useCollapseStore } from '@/stores/collapse'
 
-    const isCollapse = ref(true)
+    const collapseStore = useCollapseStore()
+
+    const isAsideCollapse = computed(() => collapseStore.isCollapse ? "64px" : "200px")
+
 
 </script>
 <style>
+  #header{
+    padding: 0 0px;
+  }
     .el-header, .el-footer {
     background-color: #B3C0D1;
     color: #333;
@@ -26,7 +36,7 @@
   }
   
   .el-aside {
-    background-color: #D3DCE6;
+    background-color: #ffffff;
     color: #333;
     text-align: center;
     line-height: 200px;
@@ -54,5 +64,12 @@
   }
   .el-container{
       height: 100%;
+  }
+  .aside{
+    overflow: hidden;
+    transition: width 0.25s;
+    -webkit-transition: width 0.25s;
+    -moz-transition: width 0.25s; 
+    -o-transition: width 0.25s;
   }
 </style>

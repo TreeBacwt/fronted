@@ -2,9 +2,11 @@
     <div class="menu">
 
         <el-menu
+            id="aside"
             default-active="userlist"
             class="el-menu-vertical-demo emenu"
-            :collapse="props.isCollapse"
+            :collapse="store.isCollapse"
+            :collapse-transition="false"
         >
             <el-menu-item index="userList">
                 <el-icon><user/></el-icon>
@@ -36,12 +38,15 @@
         Menu as IconMenu,
         Setting,
     } from '@element-plus/icons-vue'
+    import { useCollapseStore } from '@/stores/collapse'
 
-    const props = defineProps(['isCollapse'])
-
+    const store = useCollapseStore()
 </script>
 <style scoped>  
     .menu, .el-menu{
         height: 100%;
+    }
+    #aside{
+        border-right:0px;
     }
 </style>
