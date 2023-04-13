@@ -19,7 +19,11 @@
         <el-input v-model="search" size="small" placeholder="搜索账户名" />
       </template>
       <template #default="scope">
-        <el-button size="small" type="danger" @click="handleDelete(scope.row.id)"
+        <el-button
+          size="small"
+          type="danger"
+          @click="deleteUser(scope.row.id)"
+          :disabled="handleButtonState(scope.row.id)"
           >Delete</el-button
         >
       </template>
@@ -29,9 +33,11 @@
 
 <script lang="ts" setup>
 import { computed, ref, inject } from "vue"
+import { useUserStore } from "@/stores/user"
 
 const axios = inject("axios")
 const search = ref("")
+const user = computed(() => useUserStore().user)
 const tableData = ref([])
 const filterTableData = computed(() =>
   tableData.value.filter(
@@ -40,17 +46,7 @@ const filterTableData = computed(() =>
   )
 )
 
-axios({
-  method: "get",
-  url: "/user/all",
-}).then((res) => {
-  let data = res.data
-  if (data.code == 1) {
-    tableData.value = data.data
-  } else {
-    ElMessage.error(data.message)
-  }
-})
+getUsers()
 
 function handleRoleType(role) {
   if (role == 1) {
@@ -66,7 +62,61 @@ function handleRoleText(role) {
     return "学生"
   } else return "家长"
 }
-function handleDelete(id) {
-  console.log(id)
+function deleteUser(id) {
+  ElMessageBox.confirm("确认删除用户吗？", "警告", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(() => {
+      axios({
+        method: "delete",
+        url: "/user/delete",
+        params: {
+          id,
+        },
+      }).then((res) => {
+        let data = res.data
+        if (data.code == 1) {
+          ElNotification({
+            title: "成功",
+            message: data.message,
+            type: "success",
+          })
+        } else {
+          ElNotification({
+            title: "错误",
+            message: data.message,
+            type: "error",
+          })
+        }
+        getUsers()
+      })
+    })
+    .catch(() => {
+      ElNotification({
+        title: "提示",
+        message: "删除已取消",
+        type: "info",
+      })
+    })
+}
+function handleButtonState(id) {
+  if (user.value.id == id) {
+    return true
+  } else return false
+}
+function getUsers() {
+  axios({
+    method: "get",
+    url: "/user/all",
+  }).then((res) => {
+    let data = res.data
+    if (data.code == 1) {
+      tableData.value = data.data
+    } else {
+      ElMessage.error(data.message)
+    }
+  })
 }
 </script>
