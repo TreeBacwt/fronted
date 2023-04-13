@@ -59,7 +59,7 @@
       ElMessage.success(data.message)
       let user = data.data
       store.setUser(user)
-      router.push('/home')//todo 不同角色
+      router.push('/information')//todo 不同角色
     }else{
       /*error*/
       ElMessage.error(data.message)
@@ -69,5 +69,8 @@
 </script>
 
 <style scoped>
-
+  .container{
+    display: flex;
+    height: 100%
+  }
 </style>

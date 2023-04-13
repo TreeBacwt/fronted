@@ -3,6 +3,8 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import TestView from '@/views/TestView.vue'
 import PersonalInformation from '@/components/display/PersonalInformation.vue'
+import UsersList from '@/components/display/UsersList.vue'
+import { useUserStore } from '@/stores/user'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,10 +17,23 @@ const router = createRouter({
         path: 'personalInformation',
         name: 'personalInformation',
         component: PersonalInformation
+      },
+      {
+        path: '/',
+        redirect: { name: 'personalInformation' }
+      },      
+      {
+        path: '/information',
+        redirect: { name: 'personalInformation' }
+      },
+      {
+        path: 'usersList',
+        name: 'usersList',
+        component: UsersList
       }]
     },
     {
-      path: '/',
+      path: '/login',
       name: 'login',
       component: LoginView
     },
@@ -28,6 +43,14 @@ const router = createRouter({
       component: TestView
     }
   ]
+})
+
+router.beforeEach((to, from) => {
+  const userStore = useUserStore()
+  if (userStore.user.id == 0 && to.name !== 'login') {
+    ElMessage.warning('请先登录！')
+    return { name: 'login' }
+  }
 })
 
 export default router

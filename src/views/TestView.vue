@@ -8,9 +8,7 @@
                 <el-aside :width="isAsideCollapse" class="aside">
                   <TeacherMenu v-if="user.role == 1"/>
                 </el-aside>
-                <el-main>
-                  <PersonalInformation/>
-                </el-main>
+                <el-main><router-view></router-view></el-main>
             </el-container>
         </el-container>
   </div>
@@ -18,7 +16,6 @@
 <script lang="ts" setup>
     import TeacherMenu from '@/components/menu/TeacherMenu.vue'
     import TopMenu from '@/components/menu/TopMenu.vue'
-    import PersonalInformation from '@/components/display/PersonalInformation.vue'
     import { reactive, ref, computed } from 'vue'
     import { useCollapseStore } from '@/stores/collapse'
     import { useUserStore } from '@/stores/user'
@@ -26,7 +23,6 @@
     const collapseStore = useCollapseStore()
     const userStore = useUserStore()
     const user = computed(() => userStore.user)
-
     const isAsideCollapse = computed(() => collapseStore.isCollapse ? "64px" : "150px")
 
 

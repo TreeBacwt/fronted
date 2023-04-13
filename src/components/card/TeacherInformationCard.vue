@@ -24,7 +24,6 @@
     const user = computed(() => userStore.user)
     const teacherStore = useTeacherStore()
     const teacher = computed(() => teacherStore.teacher)
-    console.log(user.value.id);
     
     axios({
         method: 'get',

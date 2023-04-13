@@ -1,9 +1,9 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import piniaPersist from 'pinia-plugin-persist'
 
 import App from './App.vue'
 import router from './router'
+
+import pinia from './stores'
 
 //import './assets/main.css'
 // import 'element-plus/theme-chalk/el-message.css'
@@ -19,7 +19,7 @@ axios.defaults.baseURL = 'http://localhost:8080'
 
 const app = createApp(App)
 
-app.use(createPinia().use(piniaPersist))
+app.use(pinia)
 app.use(router)
 app.use(VueAxios, axios)
 app.provide('axios', app.config.globalProperties.axios)
