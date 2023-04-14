@@ -10,11 +10,14 @@
     <el-form label-position="left" label-width="100px" :model="form">
       <el-form-item label="账户名">
         <el-tooltip placement="top-start" :content="accountTipContent" effect="light">
-          <el-input v-model="form.account" @input="handleAccountInputChange"
+          <el-input
+            v-model="form.account"
+            @input="handleAccountInputChange"
+            placeholder="请输入账户名"
         /></el-tooltip>
       </el-form-item>
       <el-form-item label="姓名">
-        <el-input v-model="form.parentName" />
+        <el-input v-model="form.parentName" placeholder="请输入姓名" />
       </el-form-item>
       <el-form-item label="学生">
         <el-select

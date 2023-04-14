@@ -7,6 +7,7 @@
   >
     <el-table-column label="ID" prop="id" />
     <el-table-column label="账户名" prop="account" />
+    <el-table-column label="姓名" prop="name" />
     <el-table-column label="角色" prop="role">
       <template #default="scope">
         <el-tag :type="handleRoleType(scope.row.role)" disable-transitions>

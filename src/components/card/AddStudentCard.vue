@@ -10,11 +10,14 @@
     <el-form label-position="left" label-width="100px" :model="form">
       <el-form-item label="账户名">
         <el-tooltip placement="top-start" :content="accountTipContent" effect="light">
-          <el-input v-model="form.account" @input="handleAccountInputChange"
+          <el-input
+            v-model="form.account"
+            @input="handleAccountInputChange"
+            placeholder="请输入账户名"
         /></el-tooltip>
       </el-form-item>
       <el-form-item label="姓名">
-        <el-input v-model="form.studentName" />
+        <el-input v-model="form.studentName" placeholder="请输入姓名" />
       </el-form-item>
       <el-form-item label="性别">
         <el-select v-model="sexText" placeholder="请选择性别">
@@ -32,7 +35,7 @@
         />
       </el-form-item>
       <el-form-item label="住址">
-        <el-input v-model="form.address" />
+        <el-input v-model="form.address" placeholder="请输入家庭住址" />
       </el-form-item>
       <el-form-item label="民族">
         <el-select v-model="form.ethnic" placeholder="请选择民族">
