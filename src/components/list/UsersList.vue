@@ -20,7 +20,7 @@
         <el-input v-model="search" size="small" placeholder="搜索账户名" />
       </template>
       <template #default="scope">
-        <el-button size="small" @click="resetPassword">重置密码</el-button>
+        <el-button size="small" @click="resetPassword(scope.row.id)">重置密码</el-button>
         <el-button
           size="small"
           type="danger"
@@ -110,7 +110,33 @@ function handleButtonState(id) {
     return true
   } else return false
 }
-function resetPassword() {
-  ElMessage("功能尚未完成")
+function resetPassword(id) {
+  axios({
+    method: "get",
+    url: "/user/resetPsw/" + id,
+  })
+    .then((res) => {
+      let data = res.data
+      if (data.code == 1) {
+        ElNotification({
+          title: "成功",
+          type: "success",
+          message: data.message,
+        })
+      } else {
+        ElNotification({
+          title: "错误",
+          type: "error",
+          message: data.message,
+        })
+      }
+    })
+    .catch((res) =>
+      ElNotification({
+        title: "错误",
+        type: "error",
+        message: "发生错误！",
+      })
+    )
 }
 </script>
