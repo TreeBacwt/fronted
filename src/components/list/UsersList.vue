@@ -3,7 +3,7 @@
     :data="filterTableData"
     style="width: 100%"
     highlight-current-row
-    max-height="500"
+    max-height="450"
   >
     <el-table-column label="ID" prop="id" />
     <el-table-column label="账户名" prop="account" />

@@ -1,21 +1,21 @@
 import { defineStore } from "pinia"
 import { ref } from "vue"
 
-export const useUsersListStore = defineStore('usersList', () => {
-    const usersList = ref([])
+export const useStudentsListStore = defineStore('studentsList', () => {
+    const studentsList = ref([])
 
     function refresh(axios) {
         axios({
             method: "get",
-            url: "/user/all",
+            url: "/student/all",
         }).then((res) => {
             let data = res.data
             if (data.code == 1) {
-                usersList.value = data.data
+                studentsList.value = data.data
             } else {
                 ElMessage.error(data.message)
             }
         })
     }
-    return { usersList, refresh }
+    return { studentsList, refresh }
 })

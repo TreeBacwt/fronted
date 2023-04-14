@@ -9,7 +9,7 @@
 
     <el-form label-position="left" label-width="100px" :model="form">
       <el-form-item label="账户名">
-        <el-tooltip placement="right" :content="accountTipContent" effect="light">
+        <el-tooltip placement="top-start" :content="accountTipContent" effect="light">
           <el-input v-model="form.account" @input="handleAccountInputChange"
         /></el-tooltip>
       </el-form-item>
