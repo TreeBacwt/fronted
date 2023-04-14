@@ -17,9 +17,9 @@
         <template #title>用户管理</template>
       </el-menu-item>
 
-      <el-menu-item index="/">
+      <el-menu-item index="classAffairsManagement" @click="handleItemClick">
         <el-icon><document /></el-icon>
-        <template #title>其他页面2</template>
+        <template #title>班级事务</template>
       </el-menu-item>
       <el-menu-item index="/">
         <el-icon><setting /></el-icon>

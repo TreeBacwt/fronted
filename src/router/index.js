@@ -4,6 +4,7 @@ import LoginView from '@/views/LoginView.vue'
 import TestView from '@/views/TestView.vue'
 import PersonalInformation from '@/components/display/PersonalInformation.vue'
 import UserManagement from '@/components/display/UserManagement.vue'
+import ClassAffairsManagement from '@/components/display/ClassAffairsManagement.vue'
 import { useUserStore } from '@/stores/user'
 
 const router = createRouter({
@@ -21,7 +22,7 @@ const router = createRouter({
       {
         path: '/',
         redirect: { name: 'personalInformation' }
-      },      
+      },
       {
         path: '/information',
         redirect: { name: 'personalInformation' }
@@ -30,6 +31,11 @@ const router = createRouter({
         path: 'userManagement',
         name: 'userManagement',
         component: UserManagement
+      },
+      {
+        path: 'classAffairsManagement',
+        name: 'classAffairsManagement',
+        component: ClassAffairsManagement
       }]
     },
     {
