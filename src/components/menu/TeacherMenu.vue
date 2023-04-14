@@ -12,7 +12,7 @@
         <template #title>个人信息</template>
       </el-menu-item>
 
-      <el-menu-item index="usersList" @click="handleItemClick">
+      <el-menu-item index="userManagement" @click="handleItemClick">
         <el-icon><user /></el-icon>
         <template #title>用户管理</template>
       </el-menu-item>

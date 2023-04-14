@@ -3,7 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import TestView from '@/views/TestView.vue'
 import PersonalInformation from '@/components/display/PersonalInformation.vue'
-import UsersList from '@/components/display/UsersList.vue'
+import UserManagement from '@/components/display/UserManagement.vue'
 import { useUserStore } from '@/stores/user'
 
 const router = createRouter({
@@ -27,9 +27,9 @@ const router = createRouter({
         redirect: { name: 'personalInformation' }
       },
       {
-        path: 'usersList',
-        name: 'usersList',
-        component: UsersList
+        path: 'userManagement',
+        name: 'userManagement',
+        component: UserManagement
       }]
     },
     {
