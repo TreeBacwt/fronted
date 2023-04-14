@@ -19,12 +19,13 @@
         <el-input v-model="search" size="small" placeholder="搜索账户名" />
       </template>
       <template #default="scope">
+        <el-button size="small" @click="resetPassword">重置密码</el-button>
         <el-button
           size="small"
           type="danger"
           @click="deleteUser(scope.row.id)"
           :disabled="handleButtonState(scope.row.id)"
-          >Delete</el-button
+          >删除</el-button
         >
       </template>
     </el-table-column>
@@ -34,11 +35,13 @@
 <script lang="ts" setup>
 import { computed, ref, inject } from "vue"
 import { useUserStore } from "@/stores/user"
+import { useUsersListStore } from "@/stores/usersList"
 
 const axios = inject("axios")
 const search = ref("")
 const user = computed(() => useUserStore().user)
-const tableData = ref([])
+const usersListStore = useUsersListStore()
+const tableData = computed(() => usersListStore.usersList)
 const filterTableData = computed(() =>
   tableData.value.filter(
     (data) =>
@@ -46,7 +49,7 @@ const filterTableData = computed(() =>
   )
 )
 
-getUsers()
+usersListStore.refresh(axios)
 
 function handleRoleType(role) {
   if (role == 1) {
@@ -90,7 +93,7 @@ function deleteUser(id) {
             type: "error",
           })
         }
-        getUsers()
+        usersListStore.refresh(axios)
       })
     })
     .catch(() => {
@@ -106,17 +109,7 @@ function handleButtonState(id) {
     return true
   } else return false
 }
-function getUsers() {
-  axios({
-    method: "get",
-    url: "/user/all",
-  }).then((res) => {
-    let data = res.data
-    if (data.code == 1) {
-      tableData.value = data.data
-    } else {
-      ElMessage.error(data.message)
-    }
-  })
+function resetPassword() {
+  ElMessage("功能尚未完成")
 }
 </script>
