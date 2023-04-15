@@ -1,8 +1,10 @@
 import { defineStore } from "pinia"
-import { ref } from "vue"
+import { ref, reactive } from "vue"
 
 export const useAffairsListStore = defineStore('affairsList', () => {
     const affairsList = ref([])
+    const currentPage = ref(1)
+    const editAffair = ref({})
 
     function refresh(axios, page) {
         axios({
@@ -17,5 +19,5 @@ export const useAffairsListStore = defineStore('affairsList', () => {
             }
         })
     }
-    return { affairsList, refresh }
+    return { affairsList, refresh, currentPage, editAffair }
 })

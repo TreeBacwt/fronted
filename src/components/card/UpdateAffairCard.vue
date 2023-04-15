@@ -2,8 +2,10 @@
   <el-card class="box-card" shadow="hover">
     <template #header>
       <div class="card-header">
-        <span>添加班级事务</span>
-        <el-button type="primary" class="button" text @click="addAffair">提交</el-button>
+        <span>编辑班级事务</span>
+        <el-button type="primary" class="button" text @click="updateAffair"
+          >提交</el-button
+        >
       </div>
     </template>
 
@@ -42,20 +44,15 @@
   </el-card>
 </template>
 <script lang="ts" setup>
-import { reactive, ref, inject } from "vue"
+import { reactive, ref, inject, computed } from "vue"
 import { useAffairsListStore } from "@/stores/affairsList"
 
 const axios = inject("axios")
 const affairsListStore = useAffairsListStore()
 
-const form = reactive({
-  affairName: "",
-  affairDate: "",
-  information: "",
-  result: "",
-})
+const form = computed(() => affairsListStore.editAffair)
 
-function addAffair() {
+function updateAffair() {
   if (
     form.affairName === "" ||
     form.affairDate === "" ||
@@ -69,18 +66,21 @@ function addAffair() {
     })
   } else {
     axios({
-      method: "post",
-      url: "/affair/add",
-      params: form,
+      method: "put",
+      url: "/affair/upd",
+      params: {
+        id: form.value.id,
+        affairName: form.value.affairName,
+        affairDate: form.value.affairDate.slice(0, 10),
+        information: form.value.information,
+        result: form.value.result,
+      },
     })
       .then((res) => {
         let data = res.data
         if (data.code == 1) {
           //重置form
-          form.affairName = ""
-          form.affairDate = ""
-          form.information = ""
-          form.result = ""
+          affairsListStore.editAffair = {}
           ElNotification({
             title: "成功",
             type: "success",
@@ -93,7 +93,7 @@ function addAffair() {
             message: data.message,
           })
         }
-        affairsListStore.refresh(axios, 1) //刷新事务列表
+        affairsListStore.refresh(axios, affairsListStore.currentPage) //刷新事务列表
       })
       .catch((res) => {
         ElNotification({

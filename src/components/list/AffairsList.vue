@@ -1,18 +1,22 @@
 <template>
   <div>
-    <el-collapse>
-      <el-collapse-item :name="index" v-for="(item, index) in affairsList" :key="index">
+    <el-collapse accordion>
+      <el-collapse-item
+        :name="item.id"
+        v-for="(item, index) in affairsList"
+        :key="item.id"
+      >
         <template #title>
           <span class="text">{{ item.affairName }}</span>
         </template>
 
         <div>
           <el-descriptions :column="1" class="description">
-            <template #extra>
-              <el-button type="primary" class="edit-button" @click="editAffair"
+            <template #extra v-if="user.role == 1">
+              <el-button type="primary" class="edit-button" @click="editAffair(item)"
                 >编辑</el-button
               >
-              <el-button type="danger" class="edit-button" @click="deleteAffair"
+              <el-button type="danger" class="edit-button" @click="deleteAffair(item.id)"
                 >删除</el-button
               >
             </template>
@@ -32,7 +36,7 @@
         layout="prev, pager, next"
         :total="total"
         class="pagination"
-        v-model:current-page="currentPage"
+        v-model:current-page="affairsListStore.currentPage"
         @current-change="handleCurrentChange"
       />
     </div>
@@ -42,6 +46,7 @@
 <script lang="ts" setup>
 import { ref, reactive, inject, computed } from "vue"
 import { useAffairsListStore } from "@/stores/affairsList"
+import { useUserStore } from "@/stores/user"
 
 const axios = inject("axios")
 const affairsListStore = useAffairsListStore()
@@ -49,9 +54,9 @@ const affairsList = computed(() => affairsListStore.affairsList)
 affairsListStore.refresh(axios, 1)
 
 const total = ref(0)
-const currentPage = ref(1)
 getTotal()
 
+const user = computed(() => useUserStore().user)
 function getTotal() {
   axios({
     method: "get",
@@ -70,13 +75,44 @@ function getTotal() {
   })
 }
 function handleCurrentChange() {
-  affairsListStore.refresh(axios, currentPage.value)
+  affairsListStore.refresh(axios, affairsListStore.currentPage)
 }
-function editAffair() {
-  ElMessage.info("功能尚未完成")
+function editAffair(affair) {
+  affairsListStore.editAffair = JSON.parse(JSON.stringify(affair))
 }
-function deleteAffair() {
-  ElMessage.info("功能尚未完成")
+function deleteAffair(id) {
+  console.log(id)
+  axios({
+    method: "delete",
+    url: "/affair/delete",
+    params: {
+      id,
+    },
+  })
+    .then((res) => {
+      let data = res.data
+      if (data.code == 1) {
+        affairsListStore.refresh(axios, affairsListStore.currentPage)
+        ElNotification({
+          title: "成功",
+          message: data.message,
+          type: "success",
+        })
+      } else {
+        ElNotification({
+          title: "错误",
+          message: data.message,
+          type: "error",
+        })
+      }
+    })
+    .catch((res) => {
+      ElNotification({
+        title: "错误",
+        message: "出错了！",
+        type: "error",
+      })
+    })
 }
 </script>
 <style scoped>

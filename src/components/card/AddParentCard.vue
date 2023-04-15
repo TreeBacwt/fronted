@@ -1,5 +1,5 @@
 <template>
-  <el-card class="box-card" shadow="never">
+  <el-card class="box-card" shadow="hover">
     <template #header>
       <div class="card-header">
         <span>添加家长账户</span>
