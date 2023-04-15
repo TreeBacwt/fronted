@@ -31,9 +31,9 @@
         </el-menu-item>
       </el-sub-menu>
 
-      <el-menu-item index="/">
-        <el-icon><setting /></el-icon>
-        <template #title>其他页面3</template>
+      <el-menu-item index="scoresManagement" @click="handleItemClick">
+        <el-icon><EditPen /></el-icon>
+        <template #title>成绩管理</template>
       </el-menu-item>
     </el-menu>
   </div>
@@ -47,6 +47,7 @@ import {
   Menu as IconMenu,
   Setting,
   Postcard,
+  EditPen,
 } from "@element-plus/icons-vue"
 import { useCollapseStore } from "@/stores/collapse"
 import { useRouter, useRoute } from "vue-router"

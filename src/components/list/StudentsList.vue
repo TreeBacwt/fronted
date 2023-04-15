@@ -1,6 +1,10 @@
 <template>
   <div>
-    <el-collapse accordion v-model="studentsListStore.activeStudentCollapseItem">
+    <el-collapse
+      accordion
+      v-model="studentsListStore.activeStudentCollapseItem"
+      @change="handleCollapseChange"
+    >
       <el-collapse-item v-if="studentsListStore.isEdit" name="edit">
         <template #title>
           <el-tag type="success" class="text">编辑学生档案</el-tag>
@@ -124,6 +128,14 @@ function editStudent(student) {
   studentsListStore.activeStudentCollapseItem = "edit"
   console.log(JSON.stringify(student))
   studentsListStore.editStudent = JSON.parse(JSON.stringify(student))
+}
+
+/*编辑档案折叠时消失 */
+function handleCollapseChange(activeNames) {
+  console.log(activeNames)
+  if (activeNames === "") {
+    studentsListStore.isEdit = false
+  }
 }
 </script>
 <style scoped>
