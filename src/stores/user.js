@@ -8,7 +8,7 @@ export const useUserStore = defineStore('user', () => {
         role: 0
     })
 
-    function setId(id){
+    function setId(id) {
         user.id = id
     }
 
@@ -16,7 +16,7 @@ export const useUserStore = defineStore('user', () => {
         user.account = account
     }
 
-    function setRole(role){
+    function setRole(role) {
         user.role = role
     }
 
@@ -26,7 +26,13 @@ export const useUserStore = defineStore('user', () => {
         user.role = u.role
     }
 
-    return { user, setId, setAccount, setRole, setUser }
+    function logout() {
+        user.id = 0
+        user.account = ''
+        user.role = 0
+    }
+
+    return { user, setId, setAccount, setRole, setUser, logout }
 }, {
     persist: {
         enabled: true
