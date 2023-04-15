@@ -44,6 +44,7 @@
     <el-form-item>
       <template #label
         ><el-button type="success" @click="updateStudent">提交</el-button>
+        <el-button @click="cancelUpdate">取消</el-button>
       </template>
     </el-form-item>
   </el-form>
@@ -155,6 +156,11 @@ function updateStudent() {
         message: "出错了！",
       })
     })
+}
+
+function cancelUpdate() {
+  studentsListStore.activeStudentCollapseItem = form.value.studentNum
+  studentsListStore.isEdit = false
 }
 </script>
 <style></style>
