@@ -17,13 +17,17 @@
         <template #title>用户管理</template>
       </el-menu-item>
 
-      <el-sub-menu>
+      <el-sub-menu index="documents">
         <template #title>
           <el-icon><document /></el-icon>
           <span>档案管理</span>
         </template>
+
         <el-menu-item index="classAffairsManagement" @click="handleItemClick">
           班级事务
+        </el-menu-item>
+        <el-menu-item index="studentManagement" @click="handleItemClick">
+          学生档案
         </el-menu-item>
       </el-sub-menu>
 

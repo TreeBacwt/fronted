@@ -5,6 +5,7 @@ import TestView from '@/views/TestView.vue'
 import PersonalInformation from '@/components/display/PersonalInformation.vue'
 import UserManagement from '@/components/display/UserManagement.vue'
 import ClassAffairsManagement from '@/components/display/ClassAffairsManagement.vue'
+import StudentManagement from '@/components/display/StudentManagement.vue'
 import { useUserStore } from '@/stores/user'
 
 const router = createRouter({
@@ -36,6 +37,11 @@ const router = createRouter({
         path: 'classAffairsManagement',
         name: 'classAffairsManagement',
         component: ClassAffairsManagement
+      },
+      {
+        path:'studentManagement',
+        name:'studentManagement',
+        component:StudentManagement
       }]
     },
     {

@@ -20,13 +20,24 @@
                 >删除</el-button
               >
             </template>
-            <el-descriptions-item label="日期">{{
-              item.affairDate.slice(0, 10)
-            }}</el-descriptions-item>
-            <el-descriptions-item label="详细情况">{{
-              item.information
-            }}</el-descriptions-item>
-            <el-descriptions-item label="结果">{{ item.result }}</el-descriptions-item>
+            <el-descriptions-item>
+              <template #label>
+                <el-tag>日期</el-tag>
+              </template>
+              {{ item.affairDate.slice(0, 10) }}</el-descriptions-item
+            >
+            <el-descriptions-item>
+              <template #label>
+                <el-tag>详细情况</el-tag>
+              </template>
+              {{ item.information }}</el-descriptions-item
+            >
+            <el-descriptions-item>
+              <template #label>
+                <el-tag>结果</el-tag>
+              </template>
+              {{ item.result }}</el-descriptions-item
+            >
           </el-descriptions>
         </div>
       </el-collapse-item>

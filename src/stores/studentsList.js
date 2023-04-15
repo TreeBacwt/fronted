@@ -3,6 +3,9 @@ import { ref } from "vue"
 
 export const useStudentsListStore = defineStore('studentsList', () => {
     const studentsList = ref([])
+    const editStudent = ref({})
+    const activeStudentCollapseItem = ref('')
+    const isEdit = ref(false)
 
     function refresh(axios) {
         axios({
@@ -17,5 +20,5 @@ export const useStudentsListStore = defineStore('studentsList', () => {
             }
         })
     }
-    return { studentsList, refresh }
+    return { studentsList, refresh, editStudent, activeStudentCollapseItem, isEdit }
 })
