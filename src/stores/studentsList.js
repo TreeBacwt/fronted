@@ -21,4 +21,8 @@ export const useStudentsListStore = defineStore('studentsList', () => {
         })
     }
     return { studentsList, refresh, editStudent, activeStudentCollapseItem, isEdit }
+}, {
+    persist: {
+        enabled: true
+    }
 })
