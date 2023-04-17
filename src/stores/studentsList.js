@@ -6,6 +6,7 @@ export const useStudentsListStore = defineStore('studentsList', () => {
     const editStudent = ref({})
     const activeStudentCollapseItem = ref('')
     const isEdit = ref(false)
+    const scores = ref([])
 
     function refresh(axios) {
         axios({
@@ -15,12 +16,21 @@ export const useStudentsListStore = defineStore('studentsList', () => {
             let data = res.data
             if (data.code == 1) {
                 studentsList.value = data.data
+                data.data.forEach((student) => {
+                    scores.value[student.studentNum] = {
+                        studentNum: student.studentNum,
+                        english: 0,
+                        math: 0,
+                        chinese: 0,
+                        computer: 0,
+                    }
+                })
             } else {
                 ElMessage.error(data.message)
             }
         })
     }
-    return { studentsList, refresh, editStudent, activeStudentCollapseItem, isEdit }
+    return { studentsList, refresh, editStudent, activeStudentCollapseItem, isEdit, scores }
 }, {
     persist: {
         enabled: true

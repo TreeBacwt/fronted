@@ -25,7 +25,7 @@
       <el-form-item label="英语">
         <el-input
           placeholder="请输入分数"
-          v-model="scoresList[item.studentNum].english"
+          v-model="studentsListStore.scores[item.studentNum].english"
           type="number"
           step="0.5"
           max="100"
@@ -36,7 +36,7 @@
       <el-form-item label="数学">
         <el-input
           placeholder="请输入分数"
-          v-model="scoresList[item.studentNum].math"
+          v-model="studentsListStore.scores[item.studentNum].math"
           type="number"
           step="0.5"
           max="100"
@@ -47,7 +47,7 @@
       <el-form-item label="语文">
         <el-input
           placeholder="请输入分数"
-          v-model="scoresList[item.studentNum].chinese"
+          v-model="studentsListStore.scores[item.studentNum].chinese"
           type="number"
           step="0.5"
           max="100"
@@ -58,7 +58,7 @@
       <el-form-item label="计算机科学与技术">
         <el-input
           placeholder="请输入分数"
-          v-model="scoresList[item.studentNum].computer"
+          v-model="studentsListStore.scores[item.studentNum].computer"
           type="number"
           step="0.5"
           max="100"
@@ -84,52 +84,52 @@ const examinationForm = reactive({
   examinationDate: "",
 })
 
-const scoresList = ref([])
-studentsListStore.studentsList.forEach((student) => {
-  scoresList.value[student.studentNum] = {
-    studentNum: student.studentNum,
-    english: 0,
-    math: 0,
-    chinese: 0,
-    computer: 0,
-  }
-})
-
+// const studentsListStore.scores = ref([])
+// studentsListStore.studentsList.forEach((student) => {
+//   studentsListStore.scores.value[student.studentNum] = {
+//     studentNum: student.studentNum,
+//     english: 0,
+//     math: 0,
+//     chinese: 0,
+//     computer: 0,
+//   }
+// })
+console.log(studentsListStore.scores.value)
 const examinationsListStore = useExaminationsListStore()
 /**限制分数输入 */
 function limitMathScore(index) {
-  if (scoresList.value[index].math > 100) {
-    scoresList.value[index].math = 100
-  } else if (scoresList.value[index].math < 0) {
-    scoresList.value[index].math = 0
+  if (studentsListStore.scores.value[index].math > 100) {
+    studentsListStore.scores.value[index].math = 100
+  } else if (studentsListStore.scores.value[index].math < 0) {
+    studentsListStore.scores.value[index].math = 0
   }
 }
 function limitEnglishScore(index) {
-  if (scoresList.value[index].english > 100) {
-    scoresList.value[index].english = 100
-  } else if (scoresList.value[index].english < 0) {
-    scoresList.value[index].english = 0
+  if (studentsListStore.scores.value[index].english > 100) {
+    studentsListStore.scores.value[index].english = 100
+  } else if (studentsListStore.scores.value[index].english < 0) {
+    studentsListStore.scores.value[index].english = 0
   }
 }
 function limitChineseScore(index) {
-  if (scoresList.value[index].chinese > 100) {
-    scoresList.value[index].chinese = 100
-  } else if (scoresList.value[index].chinese < 0) {
-    scoresList.value[index].chinese = 0
+  if (studentsListStore.scores.value[index].chinese > 100) {
+    studentsListStore.scores.value[index].chinese = 100
+  } else if (studentsListStore.scores.value[index].chinese < 0) {
+    studentsListStore.scores.value[index].chinese = 0
   }
 }
 function limitComputerScore(index) {
-  if (scoresList.value[index].computer > 100) {
-    scoresList.value[index].computer = 100
-  } else if (scoresList.value[index].computer < 0) {
-    scoresList.value[index].computer = 0
+  if (studentsListStore.scores.value[index].computer > 100) {
+    studentsListStore.scores.value[index].computer = 100
+  } else if (studentsListStore.scores.value[index].computer < 0) {
+    studentsListStore.scores.value[index].computer = 0
   }
 }
 
 function AddExaminationWithScores() {
   let list = []
   //创建list
-  scoresList.value.forEach((score) => {
+  studentsListStore.scores.value.forEach((score) => {
     if (score != null) {
       list.push({
         studentNum: score.studentNum,
