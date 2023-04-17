@@ -84,16 +84,6 @@ const examinationForm = reactive({
   examinationDate: "",
 })
 
-// const studentsListStore.scores = ref([])
-// studentsListStore.studentsList.forEach((student) => {
-//   studentsListStore.scores.value[student.studentNum] = {
-//     studentNum: student.studentNum,
-//     english: 0,
-//     math: 0,
-//     chinese: 0,
-//     computer: 0,
-//   }
-// })
 console.log(studentsListStore.scores.value)
 const examinationsListStore = useExaminationsListStore()
 /**限制分数输入 */
