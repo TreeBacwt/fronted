@@ -84,7 +84,6 @@ const examinationForm = reactive({
   examinationDate: "",
 })
 
-console.log(studentsListStore.scores.value)
 const examinationsListStore = useExaminationsListStore()
 /**限制分数输入 */
 function limitMathScore(index) {
@@ -115,7 +114,7 @@ function limitComputerScore(index) {
     studentsListStore.scores[index].computer = 0
   }
 }
-console.log(studentsListStore.scores)
+
 function AddExaminationWithScores() {
   let list = []
   //创建list

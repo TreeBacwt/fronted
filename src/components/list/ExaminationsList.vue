@@ -1,7 +1,11 @@
 <template>
   <div>
-    <el-collapse accordion>
-      <el-collapse-item>
+    <el-collapse
+      accordion
+      @change="examinationsListStore.getScoresOfExamination(axios, activeItemName)"
+      v-model="activeItemName"
+    >
+      <el-collapse-item name="edit">
         <template #title>
           <el-tag class="date-tag" type="success">添加考试信息</el-tag>
         </template>
@@ -19,6 +23,7 @@
           <span class="text">{{ item.examinationName }}</span>
           <el-tag class="date-tag">{{ item.examinationDate.slice(0, 10) }}</el-tag>
         </template>
+        <ExaminationTable :examinationId="item.id" />
       </el-collapse-item>
     </el-collapse>
     <div class="paginationContainer">
@@ -67,6 +72,8 @@ function getTotal() {
 function handleCurrentChange() {
   examinationsListStore.refresh(axios, examinationsListStore.currentPage)
 }
+
+const activeItemName = ref("")
 </script>
 <style scoped>
 .text {
