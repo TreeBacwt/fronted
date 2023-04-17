@@ -88,38 +88,38 @@ console.log(studentsListStore.scores.value)
 const examinationsListStore = useExaminationsListStore()
 /**限制分数输入 */
 function limitMathScore(index) {
-  if (studentsListStore.scores.value[index].math > 100) {
-    studentsListStore.scores.value[index].math = 100
-  } else if (studentsListStore.scores.value[index].math < 0) {
-    studentsListStore.scores.value[index].math = 0
+  if (studentsListStore.scores[index].math > 100) {
+    studentsListStore.scores[index].math = 100
+  } else if (studentsListStore.scores[index].math < 0) {
+    studentsListStore.scores[index].math = 0
   }
 }
 function limitEnglishScore(index) {
-  if (studentsListStore.scores.value[index].english > 100) {
-    studentsListStore.scores.value[index].english = 100
-  } else if (studentsListStore.scores.value[index].english < 0) {
-    studentsListStore.scores.value[index].english = 0
+  if (studentsListStore.scores[index].english > 100) {
+    studentsListStore.scores[index].english = 100
+  } else if (studentsListStore.scores[index].english < 0) {
+    studentsListStore.scores[index].english = 0
   }
 }
 function limitChineseScore(index) {
-  if (studentsListStore.scores.value[index].chinese > 100) {
-    studentsListStore.scores.value[index].chinese = 100
-  } else if (studentsListStore.scores.value[index].chinese < 0) {
-    studentsListStore.scores.value[index].chinese = 0
+  if (studentsListStore.scores[index].chinese > 100) {
+    studentsListStore.scores[index].chinese = 100
+  } else if (studentsListStore.scores[index].chinese < 0) {
+    studentsListStore.scores[index].chinese = 0
   }
 }
 function limitComputerScore(index) {
-  if (studentsListStore.scores.value[index].computer > 100) {
-    studentsListStore.scores.value[index].computer = 100
-  } else if (studentsListStore.scores.value[index].computer < 0) {
-    studentsListStore.scores.value[index].computer = 0
+  if (studentsListStore.scores[index].computer > 100) {
+    studentsListStore.scores[index].computer = 100
+  } else if (studentsListStore.scores[index].computer < 0) {
+    studentsListStore.scores[index].computer = 0
   }
 }
-
+console.log(studentsListStore.scores)
 function AddExaminationWithScores() {
   let list = []
   //创建list
-  studentsListStore.scores.value.forEach((score) => {
+  studentsListStore.scores.forEach((score) => {
     if (score != null) {
       list.push({
         studentNum: score.studentNum,
@@ -163,6 +163,7 @@ function AddExaminationWithScores() {
           type: "success",
           message: data.message,
         })
+        studentsListStore.refresh(axios) //重置表单
       } else {
         ElNotification({
           title: "错误",
