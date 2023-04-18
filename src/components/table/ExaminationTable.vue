@@ -145,6 +145,7 @@ const updateScores = reactive({
 function handleEditButton(scope) {
   scope.row.isEdit = 1
 }
+let i = 1
 function handleCancelButton(scope) {
   scope.row.isEdit = 0
   updateScores.english = 0
