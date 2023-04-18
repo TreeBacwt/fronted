@@ -21,18 +21,21 @@ export const useExaminationsListStore = defineStore('examinationsList', () => {
         })
     }
     function getScoresOfExamination(axios, eid) {
-        axios({
-            method: "get",
-            url: '/score/getScoresOfExam/' + eid,
-        }).then((res) => {
-            let data = res.data
-            if (data.code == 1) {
-                scores.value = data.data
-            } else {
-                ElMessage.info(data.message)
-            }
-        }).catch((res) => {
-        })
+        if (typeof eid === 'number') {
+            axios({
+                method: "get",
+                url: '/score/getScoresOfExam/' + eid,
+            }).then((res) => {
+                let data = res.data
+                if (data.code == 1) {
+                    scores.value = data.data
+                } else {
+                    ElMessage.info(data.message)
+                }
+            }).catch((res) => {
+            })
+        }
+
     }
     return { examinationsList, refresh, currentPage, getScoresOfExamination, scores, activeItemName }
 })
