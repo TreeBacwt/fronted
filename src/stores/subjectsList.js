@@ -1,9 +1,12 @@
 import { defineStore } from "pinia"
 import { ref } from "vue"
+import { useStudentsListStore } from "./studentsList"
 
 export const useSubjectsListStore = defineStore('subjectsList', () => {
     const subjectsList = ref([])
     let updateScore = {}
+    const examinationForm = ref([])
+    const studentsListStore = useStudentsListStore()
     function refresh(axios) {
         axios({
             method: "get",
@@ -13,12 +16,25 @@ export const useSubjectsListStore = defineStore('subjectsList', () => {
             if (data.code == 1) {
                 subjectsList.value = data.data
                 data.data.forEach((subject) => {
-                    updateScore[subject.id.toString()] = 0 //初始化编辑分数
+                    //初始化编辑分数
+                    updateScore[subject.id.toString()] = 0
+                })
+                //初始化新建考试Form
+                examinationForm.value = []
+                studentsListStore.studentsList.forEach(student => {
+                    let item = {
+                        studentName: student.studentName,
+                        studentNum: student.studentNum
+                    }
+                    data.data.forEach((subject) => {
+                        item[subject.id.toString()] = 0
+                    })
+                    examinationForm.value.push(item)
                 })
             } else {
                 ElMessage.info(data.message)
             }
         })
     }
-    return { subjectsList, refresh, updateScore }
+    return { subjectsList, refresh, updateScore, examinationForm }
 })
