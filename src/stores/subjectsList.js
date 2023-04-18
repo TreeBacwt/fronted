@@ -20,7 +20,6 @@ export const useSubjectsListStore = defineStore('subjectsList', () => {
                     updateScore[subject.id.toString()] = 0
                 })
                 //初始化新建考试Form
-                examinationForm.value = []
                 axios({
                     method: "get",
                     url: "/student/all",
@@ -28,22 +27,23 @@ export const useSubjectsListStore = defineStore('subjectsList', () => {
                     let data = res.data
                     if (data.code == 1) {
                         studentsListStore.studentsList = data.data
+                        examinationForm.value = []
+                        studentsListStore.studentsList.forEach(student => {
+                            //console.log(student)
+                            let item = {
+                                studentName: student.studentName,
+                                studentNum: student.studentNum
+                            }
+                            subjectsList.value.forEach((subject) => {
+                                item[subject.id.toString()] = 0
+                            })
+                            examinationForm.value.push(item)
+                        })
                     } else {
                         ElMessage.error(data.message)
                     }
-                    studentsListStore.studentsList.forEach(student => {
-                        let item = {
-                            studentName: student.studentName,
-                            studentNum: student.studentNum
-                        }
-                        data.data.forEach((subject) => {
-                            item[subject.id.toString()] = 0
-                        })
-                        examinationForm.value.push(item)
-                    })
-                })
 
-                console.log(examinationForm.value)
+                })
             } else {
                 ElMessage.info(data.message)
             }

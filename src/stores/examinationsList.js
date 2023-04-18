@@ -6,6 +6,7 @@ export const useExaminationsListStore = defineStore('examinationsList', () => {
     const currentPage = ref(1)
     const scores = ref([])
     const activeItemName = ref("")
+    const total = ref(0)
 
     function refresh(axios, page) {
         axios({
@@ -37,5 +38,22 @@ export const useExaminationsListStore = defineStore('examinationsList', () => {
         }
 
     }
-    return { examinationsList, refresh, currentPage, getScoresOfExamination, scores, activeItemName }
+    function getTotal(axios) {
+        axios({
+            method: "get",
+            url: "/examination/count",
+        }).then((res) => {
+            let data = res.data
+            if (data.code == 1) {
+                total.value = data.data
+            } else {
+                ElNotification({
+                    title: "提示",
+                    message: data.message,
+                    type: "info",
+                })
+            }
+        })
+    }
+    return { examinationsList, refresh, currentPage, getScoresOfExamination, scores, activeItemName, getTotal, total }
 })

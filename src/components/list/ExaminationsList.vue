@@ -31,10 +31,11 @@
         <ExaminationTable :examinationId="item.id" />
       </el-collapse-item>
     </el-collapse>
+
     <div class="paginationContainer">
       <el-pagination
         layout="prev, pager, next"
-        :total="total"
+        :total="examinationsListStore.total"
         class="pagination"
         v-model:current-page="examinationsListStore.currentPage"
         @current-change="handleCurrentChange"
@@ -54,26 +55,8 @@ const examinationsListStore = useExaminationsListStore()
 const examinationsList = computed(() => examinationsListStore.examinationsList)
 examinationsListStore.refresh(axios, 1)
 
-const total = ref(0)
-getTotal()
+examinationsListStore.getTotal(axios)
 
-function getTotal() {
-  axios({
-    method: "get",
-    url: "/examination/count",
-  }).then((res) => {
-    let data = res.data
-    if (data.code == 1) {
-      total.value = data.data
-    } else {
-      ElNotification({
-        title: "提示",
-        message: data.message,
-        type: "info",
-      })
-    }
-  })
-}
 function handleCurrentChange() {
   examinationsListStore.refresh(axios, examinationsListStore.currentPage)
 }
