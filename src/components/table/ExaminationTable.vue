@@ -106,9 +106,49 @@ function handleCancelButton(scope) {
   for (let prop in updateScoreReactive) {
     updateScoreReactive[prop] = 0
   }
+  ElMessage.info("已取消")
 }
 function handleSubmitButton(studentNum) {
-  console.log(updateScoreReactive)
+  let scores = []
+  for (let prop in updateScoreReactive) {
+    console.log(prop)
+    scores.push({
+      subjectId: parseInt(prop),
+      examinationId: props.examinationId,
+      studentNum,
+      score: parseFloat(updateScoreReactive[prop]),
+    })
+  }
+  console.log(scores)
+  axios({
+    method: "put",
+    url: "/score/updMulti",
+    data: scores,
+  })
+    .then((res) => {
+      let data = res.data
+      if (data.code == 1) {
+        examinationsListStore.getScoresOfExamination(axios, props.examinationId)
+        ElNotification({
+          title: "成功",
+          type: "success",
+          message: data.message,
+        })
+      } else {
+        ElNotification({
+          title: "错误",
+          type: "error",
+          message: data.message,
+        })
+      }
+    })
+    .catch((res) => {
+      ElNotification({
+        title: "错误",
+        type: "error",
+        message: "出错了！",
+      })
+    })
 }
 </script>
 <style scoped>
