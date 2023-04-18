@@ -62,7 +62,7 @@ import { useUserStore } from "@/stores/user"
 const axios = inject("axios")
 const affairsListStore = useAffairsListStore()
 const affairsList = computed(() => affairsListStore.affairsList)
-affairsListStore.refresh(axios, 1)
+affairsListStore.refresh(axios, affairsListStore.currentPage)
 
 const total = ref(0)
 getTotal()

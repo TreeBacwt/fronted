@@ -53,7 +53,7 @@ import AddExaminationForm from "@/components/form/AddExaminationForm.vue"
 const axios = inject("axios")
 const examinationsListStore = useExaminationsListStore()
 const examinationsList = computed(() => examinationsListStore.examinationsList)
-examinationsListStore.refresh(axios, 1)
+examinationsListStore.refresh(axios, examinationsListStore.currentPage)
 
 examinationsListStore.getTotal(axios)
 
