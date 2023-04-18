@@ -4,7 +4,6 @@ import { ref } from "vue"
 export const useExaminationsListStore = defineStore('examinationsList', () => {
     const examinationsList = ref([])
     const currentPage = ref(1)
-    const editExamination = ref({})
     const scores = ref([])
 
     function refresh(axios, page) {
@@ -34,5 +33,5 @@ export const useExaminationsListStore = defineStore('examinationsList', () => {
         }).catch((res) => {
         })
     }
-    return { examinationsList, refresh, currentPage, editExamination, getScoresOfExamination, scores }
+    return { examinationsList, refresh, currentPage, getScoresOfExamination, scores }
 })
