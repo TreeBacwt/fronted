@@ -64,6 +64,10 @@ function handleLimitInputScore(scope) {
     subjectsListStore.examinationForm[scope.$index][scope.column.property] = 100
   else if (subjectsListStore.examinationForm[scope.$index][scope.column.property] < 0)
     subjectsListStore.examinationForm[scope.$index][scope.column.property] = 0
+  else
+    subjectsListStore.examinationForm[scope.$index][scope.column.property] = parseFloat(
+      subjectsListStore.examinationForm[scope.$index][scope.column.property]
+    )
 }
 
 const newExamination = reactive({
@@ -99,6 +103,11 @@ function handleSubmitButton() {
       let data = res.data
       if (data.code == 1) {
         examinationsListStore.refresh(axios, examinationsListStore.currentPage)
+        //直接打开新建考试
+        examinationsListStore.getScoresOfExamination(axios, data.data)
+        examinationsListStore.activeItemName = data.data
+        newExamination.examinationName = ""
+        newExamination.examinationDate = ""
         ElNotification({
           title: "成功",
           type: "success",

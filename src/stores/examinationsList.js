@@ -5,6 +5,7 @@ export const useExaminationsListStore = defineStore('examinationsList', () => {
     const examinationsList = ref([])
     const currentPage = ref(1)
     const scores = ref([])
+    const activeItemName = ref("")
 
     function refresh(axios, page) {
         axios({
@@ -33,5 +34,5 @@ export const useExaminationsListStore = defineStore('examinationsList', () => {
         }).catch((res) => {
         })
     }
-    return { examinationsList, refresh, currentPage, getScoresOfExamination, scores }
+    return { examinationsList, refresh, currentPage, getScoresOfExamination, scores, activeItemName }
 })

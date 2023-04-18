@@ -2,8 +2,13 @@
   <div>
     <el-collapse
       accordion
-      @change="examinationsListStore.getScoresOfExamination(axios, activeItemName)"
-      v-model="activeItemName"
+      @change="
+        examinationsListStore.getScoresOfExamination(
+          axios,
+          examinationsListStore.activeItemName
+        )
+      "
+      v-model="examinationsListStore.activeItemName"
     >
       <el-collapse-item name="edit">
         <template #title>
@@ -72,8 +77,6 @@ function getTotal() {
 function handleCurrentChange() {
   examinationsListStore.refresh(axios, examinationsListStore.currentPage)
 }
-
-const activeItemName = ref("")
 </script>
 <style scoped>
 .text {
