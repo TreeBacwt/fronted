@@ -12,6 +12,9 @@
           v-model="newExamination.examinationDate"
         />
       </el-form-item>
+      <el-form-item>
+        <el-button type="success" @click="handleSubmitButton">提交</el-button>
+      </el-form-item>
     </el-form>
     <el-table
       stripe
@@ -67,6 +70,56 @@ const newExamination = reactive({
   examinationName: "",
   examinationDate: "",
 })
+
+function handleSubmitButton() {
+  let scores = []
+  subjectsListStore.examinationForm.forEach((item) => {
+    subjectsListStore.subjectsList.forEach((subject) => {
+      let element = {
+        subjectId: subject.id,
+        studentNum: item.studentNum,
+        score: parseFloat(item[subject.id.toString()]),
+      }
+      scores.push(element)
+    })
+  })
+  //console.log(scores)
+  axios({
+    method: "post",
+    url: "/examination/addExamWithScores",
+    data: {
+      examination: {
+        examinationName: newExamination.examinationName,
+        examinationDate: newExamination.examinationDate,
+      },
+      scores,
+    },
+  })
+    .then((res) => {
+      let data = res.data
+      if (data.code == 1) {
+        examinationsListStore.refresh(axios, examinationsListStore.currentPage)
+        ElNotification({
+          title: "成功",
+          type: "success",
+          message: data.message,
+        })
+      } else {
+        ElNotification({
+          title: "错误",
+          type: "error",
+          message: data.message,
+        })
+      }
+    })
+    .catch((res) => {
+      ElNotification({
+        title: "错误",
+        type: "error",
+        message: "出错了！",
+      })
+    })
+}
 </script>
 <style scoped>
 .button {

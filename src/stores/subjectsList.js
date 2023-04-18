@@ -5,7 +5,7 @@ import { useStudentsListStore } from "./studentsList"
 export const useSubjectsListStore = defineStore('subjectsList', () => {
     const subjectsList = ref([])
     let updateScore = {}
-    const examinationForm = ref([])
+    const examinationForm = ref([])//新增考试所用Form
     const studentsListStore = useStudentsListStore()
     function refresh(axios) {
         axios({
