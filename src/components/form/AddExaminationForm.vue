@@ -49,7 +49,7 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, ref, reactive, computed } from "vue"
+import { inject, ref, reactive, computed, onMounted } from "vue"
 import { useExaminationsListStore } from "@/stores/examinationsList"
 import { useSubjectsListStore } from "@/stores/subjectsList"
 
@@ -57,7 +57,9 @@ const axios = inject("axios")
 const examinationsListStore = useExaminationsListStore()
 
 const subjectsListStore = useSubjectsListStore()
-subjectsListStore.refresh(axios)
+onMounted(() => {
+  subjectsListStore.refresh(axios)
+})
 
 function handleLimitInputScore(scope) {
   if (subjectsListStore.examinationForm[scope.$index][scope.column.property] > 100)
@@ -103,9 +105,13 @@ function handleSubmitButton() {
       let data = res.data
       if (data.code == 1) {
         examinationsListStore.refresh(axios, examinationsListStore.currentPage)
+        examinationsListStore.getTotal(axios)
         //直接打开新建考试
         examinationsListStore.getScoresOfExamination(axios, data.data)
         examinationsListStore.activeItemName = data.data
+        examinationsListStore.currentPage =
+          parseInt((examinationsListStore.total - 1) / 10) + 1
+        examinationsListStore.refresh(axios, examinationsListStore.currentPage)
         newExamination.examinationName = ""
         newExamination.examinationDate = ""
         ElNotification({

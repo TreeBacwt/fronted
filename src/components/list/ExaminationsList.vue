@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, inject, computed } from "vue"
+import { ref, reactive, inject, computed, onMounted } from "vue"
 import { useExaminationsListStore } from "@/stores/examinationsList"
 import ExaminationTable from "@/components/table/ExaminationTable.vue"
 import AddExaminationForm from "@/components/form/AddExaminationForm.vue"
@@ -55,7 +55,9 @@ const examinationsListStore = useExaminationsListStore()
 const examinationsList = computed(() => examinationsListStore.examinationsList)
 examinationsListStore.refresh(axios, examinationsListStore.currentPage)
 
-examinationsListStore.getTotal(axios)
+onMounted(() => {
+  examinationsListStore.getTotal(axios)
+})
 
 function handleCurrentChange() {
   examinationsListStore.refresh(axios, examinationsListStore.currentPage)

@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, ref, reactive, computed } from "vue"
+import { inject, ref, reactive, computed, onMounted } from "vue"
 import { useExaminationsListStore } from "@/stores/examinationsList"
 import { useSubjectsListStore } from "@/stores/subjectsList"
 
@@ -64,7 +64,9 @@ const props = defineProps(["examinationId"])
 const examinationsListStore = useExaminationsListStore()
 
 const subjectsListStore = useSubjectsListStore()
-subjectsListStore.refresh(axios)
+onMounted(() => {
+  subjectsListStore.refresh(axios)
+})
 
 function handleScoreText(score) {
   return score != -1 ? score : "暂无数据"
