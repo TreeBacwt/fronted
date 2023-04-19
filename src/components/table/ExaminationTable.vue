@@ -53,7 +53,7 @@
           <el-button v-if="scope.row.isEdit" @click="handleCancelButton(scope)"
             >取消</el-button
           >
-          <el-button @click="handleShowEcharts(scope)">图表 </el-button>
+          <el-button @click="handleShowEcharts(scope)">成绩概览</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -77,7 +77,6 @@
 import { inject, ref, reactive, computed, onMounted, getCurrentInstance } from "vue"
 import { useExaminationsListStore } from "@/stores/examinationsList"
 import { useSubjectsListStore } from "@/stores/subjectsList"
-import { useScoreGraphStore } from "@/stores/scoreGraph"
 import * as echarts from "echarts"
 
 const axios = inject("axios")
@@ -224,16 +223,11 @@ function handleShowEcharts(scope) {
     })
   }
   option.series[0].data = scores
-  console.log(option)
 }
 function handleDialogOpen() {
   //图表初始化
-
   personEchartDom = document.getElementById("personEchart")
-
   personEchart = echarts.init(personEchartDom)
-
-  console.log(personEchart)
   option && personEchart.setOption(option)
 }
 function handleDialogClose() {
