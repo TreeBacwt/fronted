@@ -86,6 +86,13 @@ const dialogShow = ref(false)
 let chartDom = null
 let classEchart = null
 let option = {
+  toolbox: {
+    show: true,
+    feature: {
+      mark: { show: true },
+      saveAsImage: { show: true },
+    },
+  },
   tooltip: {
     trigger: "axis",
     axisPointer: {

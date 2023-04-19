@@ -53,7 +53,7 @@
           <el-button v-if="scope.row.isEdit" @click="handleCancelButton(scope)"
             >取消</el-button
           >
-          <el-button @click="handleShowEcharts(scope)">成绩概览</el-button>
+          <el-button @click="handleShowEcharts(scope)">成绩分布</el-button>
         </template>
       </el-table-column>
     </el-table>
