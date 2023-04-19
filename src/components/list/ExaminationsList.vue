@@ -27,6 +27,7 @@
         <template #title>
           <span class="text">{{ item.examinationName }}</span>
           <el-tag class="date-tag">{{ item.examinationDate.slice(0, 10) }}</el-tag>
+          <el-button class="echart-button" @click.stop="">成绩概览</el-button>
         </template>
         <ExaminationTable :examinationId="item.id" />
       </el-collapse-item>
@@ -86,5 +87,9 @@ function handleCurrentChange() {
 .date-tag {
   position: relative;
   left: 20px;
+}
+.echart-button {
+  position: relative;
+  left: 30px;
 }
 </style>

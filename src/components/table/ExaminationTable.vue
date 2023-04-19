@@ -62,7 +62,9 @@
       align-center
       v-model="dialogShow"
       @opened="handleDialogOpen"
+      @close="handleDialogClose"
       :fullscreen="true"
+      :destroy-on-close="true"
     >
       <div class="person-echart-container">
         <div id="personEchart" class="person-echart"></div>
@@ -75,6 +77,7 @@
 import { inject, ref, reactive, computed, onMounted, getCurrentInstance } from "vue"
 import { useExaminationsListStore } from "@/stores/examinationsList"
 import { useSubjectsListStore } from "@/stores/subjectsList"
+import { useScoreGraphStore } from "@/stores/scoreGraph"
 import * as echarts from "echarts"
 
 const axios = inject("axios")
@@ -214,24 +217,27 @@ function handleShowEcharts(scope) {
   for (let key in scope.row.scores) {
     let name = subjectsListStore.subjectsList.filter((data) => data.id == key)[0]
       .subjectName
-    let value = scope.row.scores[key]
+    let value = scope.row.scores[key] != -1 ? scope.row.scores[key] : 0
     scores.push({
       name,
       value,
     })
   }
   option.series[0].data = scores
+  console.log(option)
 }
 function handleDialogOpen() {
   //图表初始化
-  if (personEchartDom == null) {
-    personEchartDom = document.getElementById("personEchart")
-  }
-  if (personEchart == null) {
-    personEchart = echarts.init(personEchartDom)
-  }
 
+  personEchartDom = document.getElementById("personEchart")
+
+  personEchart = echarts.init(personEchartDom)
+
+  console.log(personEchart)
   option && personEchart.setOption(option)
+}
+function handleDialogClose() {
+  personEchart.dispose() //dialog关闭时清空echart实例
 }
 </script>
 <style scoped>
