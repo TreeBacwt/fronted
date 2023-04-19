@@ -223,6 +223,7 @@ function handleShowEcharts(scope) {
   option.series[0].data = scores
 }
 function handleDialogOpen() {
+  //图表初始化
   if (personEchartDom == null) {
     personEchartDom = document.getElementById("personEchart")
   }
