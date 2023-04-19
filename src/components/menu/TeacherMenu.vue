@@ -35,6 +35,19 @@
         <el-icon><EditPen /></el-icon>
         <template #title>成绩管理</template>
       </el-menu-item>
+
+      <el-sub-menu index="questionnaire">
+        <template #title>
+          <el-icon><Reading /></el-icon>
+          <span>家校问卷管理</span>
+        </template>
+        <el-menu-item index="newQuestionnaire" @click="handleItemClick">
+          新建问卷
+        </el-menu-item>
+        <el-menu-item index="questionnaireManagement" @click="handleItemClick">
+          已有问卷
+        </el-menu-item>
+      </el-sub-menu>
     </el-menu>
   </div>
 </template>
@@ -48,6 +61,7 @@ import {
   Setting,
   Postcard,
   EditPen,
+  Reading,
 } from "@element-plus/icons-vue"
 import { useCollapseStore } from "@/stores/collapse"
 import { useRouter, useRoute } from "vue-router"
