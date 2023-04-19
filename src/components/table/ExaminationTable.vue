@@ -53,18 +53,20 @@
           <el-button v-if="scope.row.isEdit" @click="handleCancelButton(scope)"
             >取消</el-button
           >
-          <el-button @click="handleShowEcharts">图表 </el-button>
+          <el-button @click="handleShowEcharts(scope)">图表 </el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-dialog
-      title="成绩可视化图"
+      title="个人成绩分布图"
       align-center
       v-model="dialogShow"
       @opened="handleDialogOpen"
       :fullscreen="true"
     >
-      <div id="personEchart" style="width: 800px; height: 800px"></div>
+      <div class="person-echart-container">
+        <div id="personEchart" class="person-echart"></div>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -172,50 +174,62 @@ function handleSubmitButton(studentNum) {
 /*学生个人成绩可视化 */
 const dialogShow = ref(false)
 const context = getCurrentInstance().appContext.config.globalProperties
-let personEchartDom
-function handleShowEcharts() {
+let personEchartDom = null
+let personEchart = null
+
+let option = {
+  legend: {
+    top: "bottom",
+  },
+  toolbox: {
+    show: true,
+    feature: {
+      mark: { show: true },
+      saveAsImage: { show: true },
+    },
+  },
+  series: [
+    {
+      label: {
+        formatter(score) {
+          return score.name + ":" + score.value + "分"
+        },
+      },
+      name: "学生成绩",
+      type: "pie",
+      radius: [50, 250],
+      center: ["50%", "50%"],
+      roseType: "area",
+      itemStyle: {
+        borderRadius: 8,
+      },
+      data: [],
+    },
+  ],
+}
+function handleShowEcharts(scope) {
   dialogShow.value = true
+  option.series[0].name = scope.row.studentName
+  let scores = []
+  for (let key in scope.row.scores) {
+    let name = subjectsListStore.subjectsList.filter((data) => data.id == key)[0]
+      .subjectName
+    let value = scope.row.scores[key]
+    scores.push({
+      name,
+      value,
+    })
+  }
+  option.series[0].data = scores
 }
 function handleDialogOpen() {
-  personEchartDom = document.getElementById("personEchart")
-  let personEchart = echarts.init(personEchartDom)
-  let option
-  option = {
-    legend: {
-      top: "bottom",
-    },
-    toolbox: {
-      show: true,
-      feature: {
-        mark: { show: true },
-        dataView: { show: true, readOnly: false },
-        restore: { show: true },
-        saveAsImage: { show: true },
-      },
-    },
-    series: [
-      {
-        name: "Nightingale Chart",
-        type: "pie",
-        radius: [50, 250],
-        center: ["50%", "50%"],
-        roseType: "area",
-        itemStyle: {
-          borderRadius: 8,
-        },
-        data: [
-          { value: 40, name: "rose 1" },
-          { value: 38, name: "rose 2" },
-          { value: 32, name: "rose 3" },
-          { value: 30, name: "rose 4" },
-          { value: 28, name: "rose 5" },
-          { value: 26, name: "rose 6" },
-          { value: 22, name: "rose 7" },
-          { value: 18, name: "rose 8" },
-        ],
-      },
-    ],
+  if (personEchartDom == null) {
+    personEchartDom = document.getElementById("personEchart")
   }
+  if (personEchart == null) {
+    personEchart = echarts.init(personEchartDom)
+  }
+
   option && personEchart.setOption(option)
 }
 </script>
@@ -223,5 +237,13 @@ function handleDialogOpen() {
 .button {
   position: relative;
   left: 30px;
+}
+.person-echart-container {
+  display: flex;
+  justify-content: center;
+}
+.person-echart {
+  width: 800px;
+  height: 800px;
 }
 </style>
