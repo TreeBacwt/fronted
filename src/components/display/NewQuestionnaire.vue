@@ -52,6 +52,54 @@
             />
           </span>
         </template>
+
+        <div>
+          <el-descriptions :column="1" class="description">
+            <template #title>
+              题目：
+              <span v-if="!question.isEdit">{{ question.description }}</span>
+              <el-input v-else v-model="question.description" />
+            </template>
+
+            <template #extra>
+              <div class="question-button">
+                <el-button @click="question.isEdit = !question.isEdit">
+                  {{ question.isEdit ? "保存" : "编辑题目" }}
+                </el-button>
+                <el-button @click="handleAddOptionButton(question)">添加选项</el-button>
+              </div>
+            </template>
+
+            <el-descriptions-item
+              v-for="(option, index) in question.options"
+              :key="index"
+            >
+              <p>
+                <el-tag>{{ option.number }}</el-tag>
+                <el-input
+                  v-model="option.content"
+                  class="option-input"
+                  :disabled="!option.isEdit"
+                />
+                <el-button
+                  :icon="Edit"
+                  @click="option.isEdit = !option.isEdit"
+                  class="option-delete-button"
+                  circle
+                  text
+                />
+                <el-button
+                  type="danger"
+                  :icon="Delete"
+                  @click="handleDeleteOptionButton(question, option)"
+                  class="option-delete-button"
+                  circle
+                  text
+                />
+              </p>
+            </el-descriptions-item>
+          </el-descriptions>
+        </div>
       </el-collapse-item>
     </el-collapse>
   </div>
@@ -74,6 +122,7 @@ function handleAddQuestionButton() {
     description: newQuestion.description,
     type: 1,
     isEdit: false,
+    options: [],
   }
   questionnaireStore.newQuestions.push(question)
   newQuestion.description = ""
@@ -86,6 +135,22 @@ function handleDeleteQuestionButton(question) {
   //更新题号
   questionnaireStore.newQuestions.forEach((q, index) => {
     q.number = index + 1
+  })
+}
+
+function handleAddOptionButton(question) {
+  let option = {
+    content: "",
+    number: question.options.length + 1,
+    isEdit: false,
+  }
+  question.options.push(option)
+}
+
+function handleDeleteOptionButton(question, option) {
+  question.options = question.options.filter((item) => item != option)
+  question.options.forEach((o, index) => {
+    o.number = index + 1
   })
 }
 </script>
@@ -101,5 +166,22 @@ function handleDeleteQuestionButton(question) {
 .question-delete-button {
   position: relative;
   left: 30px;
+}
+.description {
+  position: relative;
+  left: 15px;
+}
+.question-button {
+  position: relative;
+  right: 30px;
+}
+.option-input {
+  position: relative;
+  left: 15px;
+  width: 100px;
+}
+.option-delete-button {
+  position: relative;
+  left: 25px;
 }
 </style>
