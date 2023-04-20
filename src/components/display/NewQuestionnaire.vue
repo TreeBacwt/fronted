@@ -2,22 +2,25 @@
   <div>
     <el-form class="questionnaire-form">
       <el-form-item label="问卷名称">
-        <el-input v-model="questionnaire.questionnaireName" />
+        <el-input v-model="questionnaireStore.questionnaire.questionnaireName" />
       </el-form-item>
       <el-form-item label="截止时间">
         <el-date-picker
           type="date"
           placeholder="请选择截止时间"
           value-format="YYYY-MM-DD"
-          v-model="questionnaire.overDate"
+          v-model="questionnaireStore.questionnaire.overDate"
           :disabled-date="handleDisabledDate"
         />
       </el-form-item>
       <el-form-item label="简介">
-        <el-input type="textarea" v-model="questionnaire.information" />
+        <el-input
+          type="textarea"
+          v-model="questionnaireStore.questionnaire.information"
+        />
       </el-form-item>
       <el-form-item>
-        <el-button type="success">提交</el-button>
+        <el-button type="success" @click="handleAddQuestionnaireButton">提交</el-button>
       </el-form-item>
     </el-form>
 
@@ -39,17 +42,17 @@
         </el-form>
       </el-collapse-item>
       <el-collapse-item
-        v-for="(question, index) in questionnaireStore.newQuestions"
+        v-for="(questionWithOptions, index) in questionnaireStore.newQuestions"
         :key="index"
       >
         <template #title>
           <span class="text">
-            <el-tag>{{ question.number }}</el-tag>
-            {{ question.description }}
+            <el-tag>{{ questionWithOptions.question.number }}</el-tag>
+            {{ questionWithOptions.question.description }}
             <el-button
               type="danger"
               :icon="Delete"
-              @click.stop="handleDeleteQuestionButton(question)"
+              @click.stop="handleDeleteQuestionButton(questionWithOptions)"
               class="question-delete-button"
             />
           </span>
@@ -59,21 +62,27 @@
           <el-descriptions :column="1" class="description">
             <template #title>
               题目：
-              <span v-if="!question.isEdit">{{ question.description }}</span>
-              <el-input v-else v-model="question.description" />
+              <span v-if="!questionWithOptions.isEdit">{{
+                questionWithOptions.question.description
+              }}</span>
+              <el-input v-else v-model="questionWithOptions.question.description" />
             </template>
 
             <template #extra>
               <div class="question-button">
-                <el-button @click="question.isEdit = !question.isEdit">
-                  {{ question.isEdit ? "保存" : "编辑题目" }}
+                <el-button
+                  @click="questionWithOptions.isEdit = !questionWithOptions.isEdit"
+                >
+                  {{ questionWithOptions.isEdit ? "保存" : "编辑题目" }}
                 </el-button>
-                <el-button @click="handleAddOptionButton(question)">添加选项</el-button>
+                <el-button @click="handleAddOptionButton(questionWithOptions)"
+                  >添加选项</el-button
+                >
               </div>
             </template>
 
             <el-descriptions-item
-              v-for="(option, index) in question.options"
+              v-for="(option, index) in questionWithOptions.options"
               :key="index"
             >
               <p>
@@ -82,6 +91,7 @@
                   v-model="option.content"
                   class="option-input"
                   :disabled="!option.isEdit"
+                  placeholder="请输入选项"
                 />
                 <el-button
                   :icon="Edit"
@@ -93,7 +103,7 @@
                 <el-button
                   type="danger"
                   :icon="Delete"
-                  @click="handleDeleteOptionButton(question, option)"
+                  @click="handleDeleteOptionButton(questionWithOptions, option)"
                   class="option-delete-button"
                   circle
                   text
@@ -113,55 +123,27 @@ import { Delete, Edit } from "@element-plus/icons-vue"
 
 const axios = inject("axios")
 const questionnaireStore = useQuestionnaireStore()
-/*当天日期格式化 */
-Date.prototype.format = function (format) {
-  let d = {
-    "M+": this.getMonth() + 1,
-    "d+": this.getDate(),
-    "h+": this.getHours(),
-    "m+": this.getMinutes(),
-  }
-  if (/(y+)/.test(format)) {
-    format = format.replace(
-      RegExp.$1,
-      (this.getFullYear() + "").substr(4 - RegExp.$1.length)
-    )
-  }
-  for (let k in d) {
-    if (new RegExp("(" + k + ")").test(format)) {
-      format = format.replace(
-        RegExp.$1,
-        RegExp.$1.length == 1 ? d[k] : ("00" + d[k]).substr(("" + d[k]).length)
-      )
-    }
-  }
-  return format
-}
 
 /*禁止选择比当天更早的日期 */
 function handleDisabledDate(time) {
   return time.getTime() < Date.now()
 }
-const questionnaire = reactive({
-  questionnaireName: "",
-  questionnaireDate: new Date().format("yyyy-MM-dd"),
-  information: "",
-  overDate: "",
-})
 
 const newQuestion = reactive({
   description: "",
 })
 
 function handleAddQuestionButton() {
-  let question = {
-    number: questionnaireStore.newQuestions.length + 1,
-    description: newQuestion.description,
-    type: 1,
+  let questionWithOptions = {
+    question: {
+      number: questionnaireStore.newQuestions.length + 1,
+      description: newQuestion.description,
+      type: 1,
+    },
     isEdit: false,
     options: [],
   }
-  questionnaireStore.newQuestions.push(question)
+  questionnaireStore.newQuestions.push(questionWithOptions)
   newQuestion.description = ""
 }
 
@@ -171,7 +153,7 @@ function handleDeleteQuestionButton(question) {
   )
   //更新题号
   questionnaireStore.newQuestions.forEach((q, index) => {
-    q.number = index + 1
+    q.question.number = index + 1
   })
 }
 
@@ -179,7 +161,7 @@ function handleAddOptionButton(question) {
   let option = {
     content: "",
     number: question.options.length + 1,
-    isEdit: false,
+    isEdit: true,
   }
   question.options.push(option)
 }
@@ -189,6 +171,67 @@ function handleDeleteOptionButton(question, option) {
   question.options.forEach((o, index) => {
     o.number = index + 1
   })
+}
+
+function handleAddQuestionnaireButton() {
+  ElMessageBox.confirm("确认创建调查问卷吗？", "提示", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    type: "info",
+  })
+    .then(() => {
+      //删除所有isEdit属性
+      questionnaireStore.newQuestions.forEach((element) => {
+        delete element.isEdit
+        element.options.forEach((option) => {
+          delete option.isEdit
+        })
+      })
+
+      let data = {
+        questionnaire: questionnaireStore.questionnaire,
+        questions: questionnaireStore.newQuestions,
+      }
+      axios({
+        method: "post",
+        url: "/questionnaire/add/questionnaireWithQuestionsAndOptions",
+        data,
+      })
+        .then((res) => {
+          let data = res.data
+          if (data.code == 1) {
+            ElNotification({
+              title: "成功",
+              type: "success",
+              message: data.message,
+            })
+            //清空各项表单
+            questionnaireStore.newQuestions = []
+            questionnaireStore.resetQuestionnaire()
+          } else {
+            ElNotification({
+              title: "错误",
+              type: "error",
+              message: data.message,
+            })
+          }
+        })
+        .catch((res) => {
+          ElNotification({
+            title: "错误",
+            type: "error",
+            message: "出错了！",
+          })
+        })
+      // console.log(JSON.stringify(data))
+      // console.log(data)
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "创建已取消",
+      })
+    })
 }
 </script>
 <style scoped>
@@ -215,7 +258,7 @@ function handleDeleteOptionButton(question, option) {
 .option-input {
   position: relative;
   left: 15px;
-  width: 100px;
+  width: 200px;
 }
 .option-delete-button {
   position: relative;
