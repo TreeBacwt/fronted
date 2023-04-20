@@ -47,7 +47,7 @@
             <el-button
               type="danger"
               :icon="Delete"
-              @click.stop=""
+              @click.stop="handleDeleteQuestionButton(question)"
               class="question-delete-button"
             />
           </span>
@@ -67,6 +67,7 @@ const questionnaireStore = useQuestionnaireStore()
 const newQuestion = reactive({
   description: "",
 })
+
 function handleAddQuestionButton() {
   let question = {
     number: questionnaireStore.newQuestions.length + 1,
@@ -76,6 +77,16 @@ function handleAddQuestionButton() {
   }
   questionnaireStore.newQuestions.push(question)
   newQuestion.description = ""
+}
+
+function handleDeleteQuestionButton(question) {
+  questionnaireStore.newQuestions = questionnaireStore.newQuestions.filter(
+    (item) => item != question
+  )
+  //更新题号
+  questionnaireStore.newQuestions.forEach((q, index) => {
+    q.number = index + 1
+  })
 }
 </script>
 <style scoped>
