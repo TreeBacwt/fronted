@@ -2,17 +2,19 @@
   <div>
     <el-form class="questionnaire-form">
       <el-form-item label="问卷名称">
-        <el-input />
+        <el-input v-model="questionnaire.questionnaireName" />
       </el-form-item>
       <el-form-item label="截止时间">
         <el-date-picker
           type="date"
           placeholder="请选择截止时间"
           value-format="YYYY-MM-DD"
+          v-model="questionnaire.overDate"
+          :disabled-date="handleDisabledDate"
         />
       </el-form-item>
       <el-form-item label="简介">
-        <el-input type="textarea" />
+        <el-input type="textarea" v-model="questionnaire.information" />
       </el-form-item>
       <el-form-item>
         <el-button type="success">提交</el-button>
@@ -111,6 +113,41 @@ import { Delete, Edit } from "@element-plus/icons-vue"
 
 const axios = inject("axios")
 const questionnaireStore = useQuestionnaireStore()
+/*当天日期格式化 */
+Date.prototype.format = function (format) {
+  let d = {
+    "M+": this.getMonth() + 1,
+    "d+": this.getDate(),
+    "h+": this.getHours(),
+    "m+": this.getMinutes(),
+  }
+  if (/(y+)/.test(format)) {
+    format = format.replace(
+      RegExp.$1,
+      (this.getFullYear() + "").substr(4 - RegExp.$1.length)
+    )
+  }
+  for (let k in d) {
+    if (new RegExp("(" + k + ")").test(format)) {
+      format = format.replace(
+        RegExp.$1,
+        RegExp.$1.length == 1 ? d[k] : ("00" + d[k]).substr(("" + d[k]).length)
+      )
+    }
+  }
+  return format
+}
+
+/*禁止选择比当天更早的日期 */
+function handleDisabledDate(time) {
+  return time.getTime() < Date.now()
+}
+const questionnaire = reactive({
+  questionnaireName: "",
+  questionnaireDate: new Date().format("yyyy-MM-dd"),
+  information: "",
+  overDate: "",
+})
 
 const newQuestion = reactive({
   description: "",
