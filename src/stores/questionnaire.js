@@ -43,6 +43,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', () => {
     const questionnairesList = ref([])
     const currentPage = ref(1)
     const total = ref(0)
+    const unDoneQuestionnairesList = ref([])
 
     function resetQuestionnaire() {
         questionnaire.questionnaireName = ""
@@ -89,6 +90,30 @@ export const useQuestionnaireStore = defineStore('questionnaire', () => {
         })
     }
 
+    function refreshUnDoneQuestionnairesList(axios, pid) {
+        axios({
+            method: 'get',
+            url: '/questionnaire/getQuestionnairesByParentId/' + pid,
+        }).then((res) => {
+            let data = res.data
+            if (data.code == 1) {
+                unDoneQuestionnairesList.value = data.data
+            } else {
+                ElNotification({
+                    title: '错误',
+                    type: "error",
+                    message: data.message
+                })
+            }
+        }).catch((res) => {
+            ElNotification({
+                title: '错误',
+                type: "error",
+                message: "出错了！"
+            })
+        })
+    }
+
     return {
         newQuestions,
         questionnaire,
@@ -97,7 +122,9 @@ export const useQuestionnaireStore = defineStore('questionnaire', () => {
         questionnairesList,
         refreshQuestionnairesList,
         total,
-        getTotal
+        getTotal,
+        unDoneQuestionnairesList,
+        refreshUnDoneQuestionnairesList
     }
 }, {
     persist: {

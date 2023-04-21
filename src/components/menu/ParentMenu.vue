@@ -12,7 +12,10 @@
         <template #title>个人信息</template>
       </el-menu-item>
 
-      <el-sub-menu> </el-sub-menu>
+      <el-menu-item index="questionnaireManagement" @click="handleItemClick">
+        <el-icon><Reading /></el-icon>
+        <template #title>查看问卷</template>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>

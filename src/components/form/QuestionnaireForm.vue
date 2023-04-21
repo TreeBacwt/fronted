@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-descriptions direction="vertical" :column="1">
-      <template #extra>
+      <template #extra v-if="userStore.user.role == 1">
         <el-button
           type="danger"
           class="delete-button"
@@ -50,9 +50,20 @@
           </template>
           <!-- 选项 -->
           <el-descriptions-item>
-            <!-- 老师角色 -->
+            <!-- 教师端 -->
             <el-radio-group v-if="userStore.user.role == 1">
               <el-radio v-for="(option, index) in question.options" :key="index" disabled>
+                {{ option.content }}
+              </el-radio>
+            </el-radio-group>
+
+            <!-- 家长端 -->
+            <el-radio-group v-else-if="userStore.user.role == 3">
+              <el-radio
+                v-for="(option, index) in question.options"
+                :key="index"
+                :label="option.id"
+              >
                 {{ option.content }}
               </el-radio>
             </el-radio-group>
@@ -100,7 +111,7 @@ onMounted(() => {
       ElMessage.error("出错了！")
     })
 })
-
+/*教师端功能 */
 function handleDeleteQuestionnaireButton() {
   ElMessage.info("功能尚未完成")
 }
@@ -108,6 +119,8 @@ function handleDeleteQuestionnaireButton() {
 function handleGraphButton() {
   ElMessage.info("功能尚未完成")
 }
+
+/*家长端功能 */
 </script>
 <style scoped>
 .delete-button {

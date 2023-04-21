@@ -1,7 +1,9 @@
 <template>
   <div>
     <el-collapse accordion v-model="activeName">
+      <!-- 教师端 -->
       <el-collapse-item
+        v-if="userStore.user.role == 1"
         v-for="(questionnaire, index) in questionnaireStore.questionnairesList"
         :key="index"
         :name="questionnaire.id"
@@ -24,8 +26,34 @@
 
         <QuestionnaireForm :id="questionnaire.id" />
       </el-collapse-item>
+
+      <!-- 家长端 -->
+      <el-collapse-item
+        v-else-if="userStore.user.role == 3"
+        v-for="(questionnaire, index) in questionnaireStore.unDoneQuestionnairesList"
+        :key="questionnaire.id"
+        :name="questionnaire.id"
+      >
+        <template #title>
+          <span class="text">{{ questionnaire.questionnaireName }}</span>
+          <span class="start-date">
+            开始时间
+            <el-tag class="date-tag">
+              {{ questionnaire.questionnaireDate.slice(0, 10) }}
+            </el-tag>
+          </span>
+          <span class="over-date">
+            结束时间
+            <el-tag class="date-tag" type="info">
+              {{ questionnaire.overDate.slice(0, 10) }}
+            </el-tag>
+          </span>
+        </template>
+
+        <QuestionnaireForm :id="questionnaire.id" />
+      </el-collapse-item>
     </el-collapse>
-    <div class="paginationContainer">
+    <div class="paginationContainer" v-if="userStore.user.role == 1">
       <el-pagination
         layout="prev, pager, next"
         class="pagination"
@@ -39,13 +67,21 @@
 <script lang="ts" setup>
 import { ref, reactive, inject, onMounted } from "vue"
 import { useQuestionnaireStore } from "@/stores/questionnaire"
+import { useUserStore } from "@/stores/user"
+import { useParentStore } from "@/stores/parent"
 import QuestionnaireForm from "@/components/form/QuestionnaireForm.vue"
 
 const axios = inject("axios")
 const questionnaireStore = useQuestionnaireStore()
+const userStore = useUserStore()
+const parentStore = useParentStore()
 onMounted(() => {
-  questionnaireStore.refreshQuestionnairesList(axios, questionnaireStore.currentPage)
-  questionnaireStore.getTotal(axios)
+  if (userStore.user.role == 1) {
+    questionnaireStore.refreshQuestionnairesList(axios, questionnaireStore.currentPage)
+    questionnaireStore.getTotal(axios)
+  } else if (userStore.user.role == 3) {
+    questionnaireStore.refreshUnDoneQuestionnairesList(axios, parentStore.parent.id)
+  }
 })
 
 function handleCurrentChange() {
