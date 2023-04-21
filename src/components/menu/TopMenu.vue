@@ -31,7 +31,9 @@ const userStore = useUserStore()
 const router = useRouter()
 function logout() {
   userStore.logout()
-  router.push("/")
+  router.push("/login")
+  ElMessage.warning("请重新登录")
+  console.log(111)
 }
 </script>
 <style scoped>
