@@ -1,4 +1,4 @@
-import { ElNotification } from "element-plus"
+import { ElMessage, ElNotification } from "element-plus"
 import { defineStore } from "pinia"
 import { ref, reactive } from "vue"
 
@@ -42,6 +42,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', () => {
     //问卷列表
     const questionnairesList = ref([])
     const currentPage = ref(1)
+    const total = ref(0)
 
     function resetQuestionnaire() {
         questionnaire.questionnaireName = ""
@@ -75,13 +76,28 @@ export const useQuestionnaireStore = defineStore('questionnaire', () => {
             })
         })
     }
+
+    function getTotal(axios) {
+        axios({
+            method: 'get',
+            url: '/questionnaire/getTotal',
+        }).then((res) => {
+            let data = res.data
+            total.value = data.data
+        }).catch((res) => {
+            ElMessage.error("出错了！")
+        })
+    }
+
     return {
         newQuestions,
         questionnaire,
         resetQuestionnaire,
         currentPage,
         questionnairesList,
-        refreshQuestionnairesList
+        refreshQuestionnairesList,
+        total,
+        getTotal
     }
 }, {
     persist: {

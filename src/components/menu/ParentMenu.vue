@@ -11,6 +11,8 @@
         <el-icon><postcard /></el-icon>
         <template #title>个人信息</template>
       </el-menu-item>
+
+      <el-sub-menu> </el-sub-menu>
     </el-menu>
   </div>
 </template>

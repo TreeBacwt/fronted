@@ -25,6 +25,15 @@
         <QuestionnaireForm :id="questionnaire.id" />
       </el-collapse-item>
     </el-collapse>
+    <div class="paginationContainer">
+      <el-pagination
+        layout="prev, pager, next"
+        class="pagination"
+        v-model:current-page="questionnaireStore.currentPage"
+        :total="questionnaireStore.total"
+        @current-change="handleCurrentChange"
+      />
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -36,8 +45,12 @@ const axios = inject("axios")
 const questionnaireStore = useQuestionnaireStore()
 onMounted(() => {
   questionnaireStore.refreshQuestionnairesList(axios, questionnaireStore.currentPage)
+  questionnaireStore.getTotal(axios)
 })
 
+function handleCurrentChange() {
+  questionnaireStore.refreshQuestionnairesList(axios, questionnaireStore.currentPage)
+}
 const activeName = ref("")
 </script>
 <style scoped>
@@ -56,5 +69,12 @@ const activeName = ref("")
 .date-tag {
   position: relative;
   left: 10px;
+}
+.paginationContainer {
+  display: flex;
+  flex-direction: column;
+}
+.pagination {
+  align-self: center;
 }
 </style>
