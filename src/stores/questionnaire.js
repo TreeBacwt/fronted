@@ -1,3 +1,4 @@
+import { ElNotification } from "element-plus"
 import { defineStore } from "pinia"
 import { ref, reactive } from "vue"
 
@@ -27,6 +28,7 @@ Date.prototype.format = function (format) {
 }
 
 export const useQuestionnaireStore = defineStore('questionnaire', () => {
+    //新建问卷
     const newQuestions = ref([])
     const questionnaire = reactive({
         questionnaireName: "",
@@ -37,6 +39,10 @@ export const useQuestionnaireStore = defineStore('questionnaire', () => {
         isOver: 0
     })
 
+    //问卷列表
+    const questionnairesList = ref([])
+    const currentPage = ref(1)
+
     function resetQuestionnaire() {
         questionnaire.questionnaireName = ""
         questionnaire.questionnaireDate = new Date().format("yyyy-MM-dd")
@@ -45,7 +51,38 @@ export const useQuestionnaireStore = defineStore('questionnaire', () => {
         questionnaire.respondent = 0
         questionnaire.isOver = 0
     }
-    return { newQuestions, questionnaire, resetQuestionnaire }
+
+    function refreshQuestionnairesList(axios, page) {
+        axios({
+            method: 'get',
+            url: '/questionnaire/list/' + page,
+        }).then((res) => {
+            let data = res.data
+            if (data.code == 1) {
+                questionnairesList.value = data.data
+            } else {
+                ElNotification({
+                    title: '错误',
+                    type: "error",
+                    message: data.message
+                })
+            }
+        }).catch((res) => {
+            ElNotification({
+                title: '错误',
+                type: "error",
+                message: "出错了！"
+            })
+        })
+    }
+    return {
+        newQuestions,
+        questionnaire,
+        resetQuestionnaire,
+        currentPage,
+        questionnairesList,
+        refreshQuestionnairesList
+    }
 }, {
     persist: {
         enabled: true
