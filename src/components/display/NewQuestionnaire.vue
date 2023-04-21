@@ -174,64 +174,97 @@ function handleDeleteOptionButton(question, option) {
 }
 
 function handleAddQuestionnaireButton() {
-  ElMessageBox.confirm("确认创建调查问卷吗？", "提示", {
-    confirmButtonText: "确认",
-    cancelButtonText: "取消",
-    type: "info",
-  })
-    .then(() => {
-      //删除所有isEdit属性
-      questionnaireStore.newQuestions.forEach((element) => {
-        delete element.isEdit
+  if (
+    questionnaireStore.questionnaire.questionnaireName === "" ||
+    questionnaireStore.questionnaire.questionnaireDate === "" ||
+    questionnaireStore.questionnaire.information === "" ||
+    questionnaireStore.questionnaire.overDate === ""
+  ) {
+    ElNotification({
+      title: "警告",
+      type: "warning",
+      message: "问卷信息不能为空！",
+    })
+  } else {
+    let flag = true //options不能为空
+    questionnaireStore.newQuestions.forEach((element) => {
+      if (element.options.length == 0 || element.question.description === "") {
+        flag = false
+      } else {
         element.options.forEach((option) => {
-          delete option.isEdit
-        })
-      })
-
-      let data = {
-        questionnaire: questionnaireStore.questionnaire,
-        questions: questionnaireStore.newQuestions,
-      }
-      axios({
-        method: "post",
-        url: "/questionnaire/add/questionnaireWithQuestionsAndOptions",
-        data,
-      })
-        .then((res) => {
-          let data = res.data
-          if (data.code == 1) {
-            ElNotification({
-              title: "成功",
-              type: "success",
-              message: data.message,
-            })
-            //清空各项表单
-            questionnaireStore.newQuestions = []
-            questionnaireStore.resetQuestionnaire()
-          } else {
-            ElNotification({
-              title: "错误",
-              type: "error",
-              message: data.message,
-            })
+          if (option.content === "") {
+            flag = false
           }
         })
-        .catch((res) => {
-          ElNotification({
-            title: "错误",
-            type: "error",
-            message: "出错了！",
+      }
+    })
+    if (!flag) {
+      ElNotification({
+        title: "警告",
+        type: "warning",
+        message: "题目选项信息均不能为空！",
+      })
+    } else {
+      ElMessageBox.confirm("确认创建调查问卷吗？", "提示", {
+        confirmButtonText: "确认",
+        cancelButtonText: "取消",
+        type: "info",
+      })
+        .then(() => {
+          //删除所有isEdit属性
+          questionnaireStore.newQuestions.forEach((element) => {
+            delete element.isEdit
+            element.options.forEach((option) => {
+              delete option.isEdit
+            })
+          })
+
+          let data = {
+            questionnaire: questionnaireStore.questionnaire,
+            questions: questionnaireStore.newQuestions,
+          }
+          axios({
+            method: "post",
+            url: "/questionnaire/add/questionnaireWithQuestionsAndOptions",
+            data,
+          })
+            .then((res) => {
+              let data = res.data
+              if (data.code == 1) {
+                ElNotification({
+                  title: "成功",
+                  type: "success",
+                  message: data.message,
+                })
+                //清空各项表单
+                questionnaireStore.newQuestions = []
+                questionnaireStore.resetQuestionnaire()
+              } else {
+                ElNotification({
+                  title: "错误",
+                  type: "error",
+                  message: data.message,
+                })
+              }
+            })
+            .catch((res) => {
+              ElNotification({
+                title: "错误",
+                type: "error",
+                message: "出错了！",
+              })
+            })
+          // console.log(JSON.stringify(data))
+          // console.log(data)
+        })
+        .catch(() => {
+          ElMessage({
+            type: "info",
+            message: "创建已取消",
           })
         })
-      // console.log(JSON.stringify(data))
-      // console.log(data)
-    })
-    .catch(() => {
-      ElMessage({
-        type: "info",
-        message: "创建已取消",
-      })
-    })
+    }
+  }
 }
 </script>
 <style scoped>
