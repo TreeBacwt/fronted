@@ -44,6 +44,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', () => {
     const currentPage = ref(1)
     const total = ref(0)
     const unDoneQuestionnairesList = ref([])
+    const unDoneIsEmpty = ref(false)
 
     function resetQuestionnaire() {
         questionnaire.questionnaireName = ""
@@ -98,12 +99,11 @@ export const useQuestionnaireStore = defineStore('questionnaire', () => {
             let data = res.data
             if (data.code == 1) {
                 unDoneQuestionnairesList.value = data.data
+                unDoneIsEmpty.value = false
             } else {
-                ElNotification({
-                    title: '错误',
-                    type: "error",
-                    message: data.message
-                })
+                ElMessage.info(data.message)
+                unDoneQuestionnairesList.value = []
+                unDoneIsEmpty.value = true
             }
         }).catch((res) => {
             ElNotification({
@@ -124,7 +124,8 @@ export const useQuestionnaireStore = defineStore('questionnaire', () => {
         total,
         getTotal,
         unDoneQuestionnairesList,
-        refreshUnDoneQuestionnairesList
+        refreshUnDoneQuestionnairesList,
+        unDoneIsEmpty
     }
 }, {
     persist: {

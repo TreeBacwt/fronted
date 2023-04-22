@@ -1,12 +1,19 @@
 <template>
   <div>
     <el-descriptions direction="vertical" :column="1">
+      <!-- 教师端 -->
       <template #extra v-if="userStore.user.role == 1">
         <el-button
           type="danger"
-          class="delete-button"
+          class="extra-button"
           @click="handleDeleteQuestionnaireButton"
           >删除
+        </el-button>
+      </template>
+      <!-- 家长端 -->
+      <template #extra v-else-if="userStore.user.role == 3">
+        <el-button type="primary" class="extra-button" @click="handleSubmitButton">
+          提交
         </el-button>
       </template>
       <!-- 问卷信息 -->
@@ -16,13 +23,13 @@
           <span class="text">{{ showQuestionnaire.questionnaire.information }}</span>
         </template>
       </el-descriptions-item>
-      <el-descriptions-item>
+      <el-descriptions-item v-if="userStore.user.role == 1">
         <template #label>
           <el-tag class="tag">已完成份数</el-tag>
           <span class="text">{{ showQuestionnaire.questionnaire.respondent }}份</span>
         </template>
       </el-descriptions-item>
-      <el-descriptions-item>
+      <el-descriptions-item v-if="userStore.user.role == 1">
         <template #label>
           <!--是否已经结束-->
           <el-tag class="tag">状态</el-tag>
@@ -58,7 +65,10 @@
             </el-radio-group>
 
             <!-- 家长端 -->
-            <el-radio-group v-else-if="userStore.user.role == 3">
+            <el-radio-group
+              v-else-if="userStore.user.role == 3"
+              v-model="answers[index].questionOptionId"
+            >
               <el-radio
                 v-for="(option, index) in question.options"
                 :key="index"
@@ -76,8 +86,12 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted, onUpdated, inject } from "vue"
 import { useUserStore } from "@/stores/user"
+import { useParentStore } from "@/stores/parent"
+import { useQuestionnaireStore } from "@/stores/questionnaire"
 
 const userStore = useUserStore()
+const parentStore = useParentStore()
+const questionnaireStore = useQuestionnaireStore()
 const axios = inject("axios")
 const props = defineProps(["id"])
 const showQuestionnaire = ref({
@@ -93,6 +107,7 @@ const showQuestionnaire = ref({
   questions: [],
 })
 
+const answers = ref([])
 /*初始化questionnaire */
 onMounted(() => {
   axios({
@@ -103,6 +118,15 @@ onMounted(() => {
       let data = res.data
       if (data.code == 1) {
         showQuestionnaire.value = data.data
+        //初始化answers数组
+        showQuestionnaire.value.questions.forEach((questionWithOpt) => {
+          let answer = {
+            questionId: questionWithOpt.question.id,
+            parentId: parentStore.parent.id,
+            questionOptionId: "",
+          }
+          answers.value.push(answer)
+        })
       } else {
         ElMessage.error(data.message)
       }
@@ -121,9 +145,53 @@ function handleGraphButton() {
 }
 
 /*家长端功能 */
+function handleSubmitButton() {
+  ElMessageBox.confirm("确认提交问卷吗？", "提示", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    type: "info",
+  })
+    .then(() => {
+      axios({
+        method: "post",
+        url: "/answer/submit",
+        data: answers.value,
+      })
+        .then((res) => {
+          let data = res.data
+          if (data.code == 1) {
+            ElNotification({
+              title: "成功",
+              type: "success",
+              message: data.message,
+            })
+            //刷新未完成问卷列表
+            questionnaireStore.refreshUnDoneQuestionnairesList(
+              axios,
+              parentStore.parent.id
+            )
+          } else {
+            ElNotification({
+              title: "错误",
+              type: "error",
+              message: data.message,
+            })
+          }
+        })
+        .catch((res) => {
+          ElNotification({
+            title: "错误",
+            type: "error",
+            message: "出错了！",
+          })
+        })
+      // console.log(answers.value)
+    })
+    .catch(() => {})
+}
 </script>
 <style scoped>
-.delete-button {
+.extra-button {
   position: relative;
   right: 15px;
 }

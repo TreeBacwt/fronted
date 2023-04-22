@@ -62,6 +62,9 @@
         @current-change="handleCurrentChange"
       />
     </div>
+    <div v-if="userStore.user.role == 3 && questionnaireStore.unDoneIsEmpty">
+      <el-empty description="暂无未完成问卷" />
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
