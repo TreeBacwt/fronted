@@ -51,7 +51,7 @@
           class="description"
         >
           <template #extra v-if="userStore.user.role == 1">
-            <el-button class="graph-button" @click="handleGraphButton"
+            <el-button class="graph-button" @click="handleGraphButton(question.question)"
               >回答情况
             </el-button>
           </template>
@@ -81,6 +81,17 @@
         </el-descriptions>
       </el-descriptions-item>
     </el-descriptions>
+
+    <!-- 回答情况对话框 -->
+    <el-dialog
+      v-model="showSituationDialog"
+      :title="questionAnswersSituation.question.description + '回答情况'"
+      width="30%"
+    >
+      <p v-for="(value, key) in questionAnswersSituation.answers">
+        "{{ key }}" 选择者 : {{ value.length != 0 ? value.toString() : "无" }}
+      </p>
+    </el-dialog>
   </div>
 </template>
 <script lang="ts" setup>
@@ -140,8 +151,40 @@ function handleDeleteQuestionnaireButton() {
   ElMessage.info("功能尚未完成")
 }
 
-function handleGraphButton() {
-  ElMessage.info("功能尚未完成")
+/*展示题目回答情况 */
+const questionAnswersSituation = ref({
+  question: {},
+  answers: {},
+})
+const showSituationDialog = ref(false)
+function handleGraphButton(question) {
+  axios({
+    method: "get",
+    url: "/answer/getAnswersSituationsByQuestionId/" + question.id,
+  })
+    .then((res) => {
+      let data = res.data
+      if (data.code == 1) {
+        console.log(data.data)
+        questionAnswersSituation.value.question = question
+        questionAnswersSituation.value.answers = data.data
+        showSituationDialog.value = true
+        console.log(questionAnswersSituation.value)
+      } else {
+        ElNotification({
+          title: "错误",
+          type: "error",
+          message: data.message,
+        })
+      }
+    })
+    .catch((res) => {
+      ElNotification({
+        title: "错误",
+        type: "error",
+        message: "出错了！",
+      })
+    })
 }
 
 /*家长端功能 */
