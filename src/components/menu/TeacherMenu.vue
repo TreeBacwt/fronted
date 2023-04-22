@@ -38,14 +38,26 @@
 
       <el-sub-menu index="questionnaire">
         <template #title>
-          <el-icon><Reading /></el-icon>
-          <span>家校问卷管理</span>
+          <el-icon><Tickets /></el-icon>
+          <span>问卷管理</span>
         </template>
         <el-menu-item index="newQuestionnaire" @click="handleItemClick">
           新建问卷
         </el-menu-item>
         <el-menu-item index="questionnaireManagement" @click="handleItemClick">
           已有问卷
+        </el-menu-item>
+      </el-sub-menu>
+
+      <el-sub-menu index="votes">
+        <template #title>
+          <el-icon><Finished /></el-icon>
+          <span>投票管理</span>
+        </template>
+
+        <el-menu-item index="newVote" @click="handleItemClick"> 发起投票 </el-menu-item>
+        <el-menu-item index="votesManagement" @click="handleItemClick">
+          已有投票
         </el-menu-item>
       </el-sub-menu>
     </el-menu>
@@ -62,6 +74,8 @@ import {
   Postcard,
   EditPen,
   Reading,
+  Tickets,
+  Finished,
 } from "@element-plus/icons-vue"
 import { useCollapseStore } from "@/stores/collapse"
 import { useRouter, useRoute } from "vue-router"

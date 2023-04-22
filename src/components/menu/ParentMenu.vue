@@ -13,7 +13,7 @@
       </el-menu-item>
 
       <el-menu-item index="questionnaireManagement" @click="handleItemClick">
-        <el-icon><Reading /></el-icon>
+        <el-icon><Tickets /></el-icon>
         <template #title>查看问卷</template>
       </el-menu-item>
     </el-menu>
@@ -30,6 +30,7 @@ import {
   Postcard,
   EditPen,
   Reading,
+  Tickets,
 } from "@element-plus/icons-vue"
 import { useCollapseStore } from "@/stores/collapse"
 import { useRouter, useRoute } from "vue-router"

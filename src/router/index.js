@@ -10,6 +10,8 @@ import ScoresManagement from '@/components/display/ScoresManagement.vue'
 import QuestionnaireManagement from '@/components/display/QuestionnaireManagement.vue'
 import NewQuestionnaire from '@/components/display/NewQuestionnaire.vue'
 import { useUserStore } from '@/stores/user'
+import VotesManagement from '@/components/display/VotesManagement.vue'
+import NewVote from '@/components/display/NewVote.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -60,6 +62,16 @@ const router = createRouter({
         path: 'newQuestionnaire',
         name: 'newQuestionnaire',
         component: NewQuestionnaire
+      },
+      {
+        path: 'votesManagement',
+        name: 'votesManagement',
+        component: VotesManagement
+      },
+      {
+        path: 'newVote',
+        name: 'newVote',
+        component: NewVote
       }]
     },
     {

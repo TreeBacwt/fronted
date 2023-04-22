@@ -86,7 +86,7 @@
     <el-dialog
       v-model="showSituationDialog"
       :title="questionAnswersSituation.question.description + '回答情况'"
-      width="30%"
+      width="50%"
     >
       <p v-for="(value, key) in questionAnswersSituation.answers">
         "{{ key }}" 选择者 : {{ value.length != 0 ? value.toString() : "无" }}
@@ -287,5 +287,9 @@ function handleSubmitButton() {
 .graph-button {
   position: relative;
   right: 30px;
+}
+.option-container {
+  display: flex;
+  flex-direction: row;
 }
 </style>
