@@ -148,7 +148,41 @@ onMounted(() => {
 })
 /*教师端功能 */
 function handleDeleteQuestionnaireButton() {
-  ElMessage.info("功能尚未完成")
+  axios({
+    method: "delete",
+    url: "/questionnaire/delete",
+    params: {
+      id: props.id,
+    },
+  })
+    .then((res) => {
+      let data = res.data
+      if (data.code == 1) {
+        ElNotification({
+          title: "成功",
+          type: "success",
+          message: data.message,
+        })
+        //刷新问卷列表
+        questionnaireStore.refreshQuestionnairesList(
+          axios,
+          questionnaireStore.currentPage
+        )
+      } else {
+        ElNotification({
+          title: "错误",
+          type: "error",
+          message: data.message,
+        })
+      }
+    })
+    .catch((res) => {
+      ElNotification({
+        title: "错误",
+        type: "error",
+        message: "出错了！",
+      })
+    })
 }
 
 /*展示题目回答情况 */
