@@ -3,6 +3,7 @@
     <el-col :span="12">
       <TeacherInformationCard v-if="userStore.user.role == 1" />
       <ParentInformationCard v-else-if="userStore.user.role == 3" />
+      <StudentInformationCard v-else />
     </el-col>
     <el-col :span="12">
       <UpdateInformationCard />
@@ -13,6 +14,7 @@
 import TeacherInformationCard from "@/components/card/TeacherInformationCard.vue"
 import UpdateInformationCard from "@/components/card/UpdateInformationCard.vue"
 import ParentInformationCard from "@/components/card/ParentInformationCard.vue"
+import StudentInformationCard from "@/components/card/StudentInformationCard.vue"
 import { useUserStore } from "@/stores/user"
 
 const userStore = useUserStore()

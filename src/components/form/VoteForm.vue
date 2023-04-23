@@ -45,11 +45,29 @@
           <el-tag class="tag"> 投票选项</el-tag>
         </template>
         <!-- 教师端 -->
-        <el-radio-group v-if="userStore.user.role == 1" class="text">
-          <el-radio v-for="(option, index) in showVote.options" :key="index" disabled>
+        <el-checkbox-group v-if="userStore.user.role == 1" class="text">
+          <el-checkbox v-for="(option, index) in showVote.options" :key="index" disabled>
+            {{ option.content }}
+          </el-checkbox>
+        </el-checkbox-group>
+
+        <!-- 学生端 -->
+        <!-- <el-radio-group v-else class="text">
+          <el-radio v-for="(option, index) in showVote.options" :key="index">
             {{ option.content }}
           </el-radio>
-        </el-radio-group>
+        </el-radio-group> -->
+        <el-checkbox-group
+          v-else
+          class="text"
+          v-model="checkedOptions"
+          :min="1"
+          :max="showVote.vote.optionsNumber"
+        >
+          <el-checkbox v-for="(option, index) in showVote.options" :key="index">
+            {{ option.content }}
+          </el-checkbox>
+        </el-checkbox-group>
       </el-descriptions-item>
 
       <!-- 评论区 -->
@@ -145,6 +163,8 @@ function handleDeleteVoteButton() {
   ElMessage.info("功能尚未完成")
 }
 
+/*学生投票功能 */
+const checkedOptions = ref([])
 /*评论功能 */
 const commentInput = ref("")
 
