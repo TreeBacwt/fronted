@@ -87,7 +87,38 @@ export const useVoteStore = defineStore('vote', () => {
         })
     }
 
-    return { newVote, newVoteOptions, votesList, refreshVotesList, getTotal, total }
+    //评论数据
+    const commentsList = ref([])
+
+    function refreshCommentsList(axios, id) {
+        axios({
+            method: 'get',
+            url: '/vote/getCommentsByVoteId/' + id,
+        }).then((res) => {
+            let data = res.data
+            if (data.code == 1) {
+                commentsList.value = data.data
+            } else {
+                commentsList.value = []
+            }
+        }).catch((res) => {
+            ElNotification({
+                title: '错误',
+                type: 'error',
+                message: "出错了！"
+            })
+        })
+    }
+    return {
+        newVote,
+        newVoteOptions,
+        votesList,
+        refreshVotesList,
+        getTotal,
+        total,
+        commentsList,
+        refreshCommentsList
+    }
 }, {
     persist: {
         enabled: true

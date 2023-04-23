@@ -17,6 +17,8 @@
             </el-tag>
           </span>
         </template>
+
+        <VoteForm :id="vote.id" />
       </el-collapse-item>
     </el-collapse>
     <div class="paginationContainer">
@@ -33,6 +35,7 @@
 <script lang="ts" setup>
 import { ref, reactive, inject, onMounted } from "vue"
 import { useVoteStore } from "@/stores/vote"
+import VoteForm from "@/components/form/VoteForm.vue"
 
 const activeName = ref("")
 const voteStore = useVoteStore()
