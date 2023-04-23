@@ -1,3 +1,4 @@
+import { ElNotification } from "element-plus"
 import { defineStore } from "pinia"
 import { ref, reactive } from "vue"
 
@@ -41,8 +42,52 @@ export const useVoteStore = defineStore('vote', () => {
     //新建投票的选项数组
     const newVoteOptions = ref([])
 
+    //投票列表
+    const votesList = ref([])
+    const currentPage = ref(1)
+    const total = ref(0)
 
-    return { newVote, newVoteOptions }
+    function refreshVotesList(axios) {
+        axios({
+            method: 'get',
+            url: '/vote/list/' + currentPage.value,
+        }).then((res) => {
+            let data = res.data
+            if (data.code == 1) {
+                votesList.value = data.data
+            } else {
+                ElNotification({
+                    title: '错误',
+                    type: 'error',
+                    message: data.message
+                })
+            }
+        }).catch((res) => {
+            ElNotification({
+                title: '错误',
+                type: 'error',
+                message: "出错了！"
+            })
+        })
+    }
+
+    function getTotal(axios) {
+        axios({
+            method: 'get',
+            url: '/vote/getTotal'
+        }).then((res) => {
+            let data = res.data
+            total.value = data.data
+        }).catch((res) => {
+            ElNotification({
+                title: '错误',
+                type: 'error',
+                message: "出错了！"
+            })
+        })
+    }
+
+    return { newVote, newVoteOptions, votesList, refreshVotesList, getTotal, total }
 }, {
     persist: {
         enabled: true
