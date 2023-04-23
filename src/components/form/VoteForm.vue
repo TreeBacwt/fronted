@@ -52,19 +52,17 @@
         </el-checkbox-group>
 
         <!-- 学生端 -->
-        <!-- <el-radio-group v-else class="text">
-          <el-radio v-for="(option, index) in showVote.options" :key="index">
-            {{ option.content }}
-          </el-radio>
-        </el-radio-group> -->
         <el-checkbox-group
           v-else
           class="text"
           v-model="checkedOptions"
-          :min="1"
-          :max="showVote.vote.optionsNumber"
+          :max="parseInt(showVote.vote.optionsNumber)"
         >
-          <el-checkbox v-for="(option, index) in showVote.options" :key="index">
+          <el-checkbox
+            v-for="(option, index) in showVote.options"
+            :key="index"
+            :label="option.id"
+          >
             {{ option.content }}
           </el-checkbox>
         </el-checkbox-group>
