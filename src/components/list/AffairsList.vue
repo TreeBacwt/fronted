@@ -12,7 +12,12 @@
 
         <div>
           <el-descriptions :column="1" class="description">
-            <template #extra v-if="user.role == 1">
+            <template
+              #extra
+              v-if="
+                user.role == 1 || (user.role == 2 && studentStore.student.isLeader == 1)
+              "
+            >
               <el-button type="primary" class="edit-button" @click="editAffair(item)"
                 >编辑</el-button
               >
@@ -58,11 +63,13 @@
 import { ref, reactive, inject, computed } from "vue"
 import { useAffairsListStore } from "@/stores/affairsList"
 import { useUserStore } from "@/stores/user"
+import { useStudentStore } from "@/stores/student"
 
 const axios = inject("axios")
 const affairsListStore = useAffairsListStore()
 const affairsList = computed(() => affairsListStore.affairsList)
 affairsListStore.refresh(axios, affairsListStore.currentPage)
+const studentStore = useStudentStore()
 
 const total = ref(0)
 getTotal()

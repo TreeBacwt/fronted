@@ -12,6 +12,11 @@
         <template #title>个人信息</template>
       </el-menu-item>
 
+      <el-menu-item index="classAffairsManagement" @click="handleItemClick">
+        <el-icon><document /></el-icon>
+        <template #title> 班级事务</template>
+      </el-menu-item>
+
       <el-sub-menu index="votes" v-if="studentStore.student.isLeader == 1">
         <template #title>
           <el-icon><Finished /></el-icon>

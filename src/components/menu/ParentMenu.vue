@@ -12,6 +12,11 @@
         <template #title>个人信息</template>
       </el-menu-item>
 
+      <el-menu-item index="classAffairsManagement" @click="handleItemClick">
+        <el-icon><document /></el-icon>
+        <template #title> 班级事务</template>
+      </el-menu-item>
+
       <el-menu-item index="questionnaireManagement" @click="handleItemClick">
         <el-icon><Tickets /></el-icon>
         <template #title>查看问卷</template>
