@@ -1,19 +1,21 @@
 import { defineStore } from "pinia"
-import { reactive } from "vue"
+import { reactive, ref } from "vue"
 
 export const useTeacherStore = defineStore('teacher', () => {
     const teacher = reactive({
+        id: '',
         name: '',
         sex: '',
         subject: '',
         information: ''
     })
 
-    function save(t){
+    function save(t) {
         teacher.name = t.teacherName
-        teacher.sex = t.sex == 1 ? '男' : '女'
+        teacher.sex = t.sex
         teacher.subject = t.subject
         teacher.information = t.information
+        teacher.id = t.id
     }
 
     return { teacher, save }
