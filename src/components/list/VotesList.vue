@@ -1,7 +1,11 @@
 <template>
   <div>
-    <el-collapse accordion v-model="activeName">
-      <el-collapse-item v-for="(vote, index) in voteStore.votesList" :key="index">
+    <el-collapse accordion v-model="activeName" @change="handleItemChange">
+      <el-collapse-item
+        v-for="(vote, index) in voteStore.votesList"
+        :key="index"
+        :name="vote.id"
+      >
         <template #title>
           <span class="text">{{ vote.voteName }}</span>
           <span class="start-date">
@@ -48,6 +52,12 @@ onMounted(() => {
 
 function handleCurrentChange() {
   voteStore.refreshVotesList(axios, voteStore.currentPage)
+}
+
+function handleItemChange(activeName) {
+  if (activeName !== "") {
+    voteStore.refreshCommentsList(axios, parseInt(activeName))
+  }
 }
 </script>
 <style scoped>
