@@ -73,7 +73,7 @@
         <!-- 学生端 -->
         <div v-else>
           <el-checkbox-group
-            v-if="!isVoted || showVote.vote.isOver == 1"
+            v-if="!isVoted && showVote.vote.isOver == 1"
             class="text"
             v-model="checkedOptions"
             :max="parseInt(showVote.vote.optionsNumber)"
