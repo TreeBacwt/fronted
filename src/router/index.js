@@ -103,7 +103,7 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
   const userStore = useUserStore()
-  if (userStore.user.id == 0 && to.name !== 'login') {
+  if (userStore.user.id == 0 && to.name !== 'login' && to.name!=='teacherRegisterView') {
     ElMessage.warning('请先登录！')
     return { name: 'login' }
   }
