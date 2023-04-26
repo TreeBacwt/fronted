@@ -12,6 +12,7 @@ import NewQuestionnaire from '@/components/display/NewQuestionnaire.vue'
 import { useUserStore } from '@/stores/user'
 import VotesManagement from '@/components/display/VotesManagement.vue'
 import NewVote from '@/components/display/NewVote.vue'
+import TeacherRegisterView from '@/views/TeacherRegisterView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -83,7 +84,20 @@ const router = createRouter({
       path: '/test',
       name: 'test',
       component: TestView
-    }
+    },
+    {
+      path: '/adminRegister',
+      name: 'teacherRegisterView',
+      component: TeacherRegisterView
+    },
+    {
+      path: '/register',
+      redirect: '/adminRegister'
+    },
+    {
+      path: '/admin',
+      redirect: '/adminRegister'
+    },
   ]
 })
 
