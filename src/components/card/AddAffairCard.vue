@@ -12,7 +12,7 @@
         <el-input v-model="form.affairName" placeholder="请输入事务名称" />
       </el-form-item>
 
-      <el-form-item label="出生日期"
+      <el-form-item label="事务日期"
         ><el-date-picker
           v-model="form.affairDate"
           type="date"
