@@ -87,48 +87,57 @@ const editTeacher = ref()
 function handleEditButton() {
   if (isEdit.value) {
     //提交
-    axios({
-      method: "put",
-      url: "/teacher/upd",
-      params: editTeacher.value,
-    })
-      .then((res) => {
-        let data = res.data
-        if (data.code == 1) {
-          ElNotification({
-            title: "成功",
-            type: "success",
-            message: data.message,
-          })
-          isEdit.value = false
-          axios({
-            method: "get",
-            url: "/teacher/queryByUid/" + user.value.id,
-          }).then((res) => {
-            let data = res.data
-            if (data.code == 1) {
-              /*success*/
-              let t = data.data
-              teacherStore.save(t)
-            } else {
-              ElMessage.error(data.message)
-            }
-          })
-        } else {
+
+    if (editTeacher.value.teacherName !== "" && editTeacher.value.information !== "") {
+      axios({
+        method: "put",
+        url: "/teacher/upd",
+        params: editTeacher.value,
+      })
+        .then((res) => {
+          let data = res.data
+          if (data.code == 1) {
+            ElNotification({
+              title: "成功",
+              type: "success",
+              message: data.message,
+            })
+            isEdit.value = false
+            axios({
+              method: "get",
+              url: "/teacher/queryByUid/" + user.value.id,
+            }).then((res) => {
+              let data = res.data
+              if (data.code == 1) {
+                /*success*/
+                let t = data.data
+                teacherStore.save(t)
+              } else {
+                ElMessage.error(data.message)
+              }
+            })
+          } else {
+            ElNotification({
+              title: "错误",
+              type: "error",
+              message: data.message,
+            })
+          }
+        })
+        .catch((res) => {
           ElNotification({
             title: "错误",
             type: "error",
-            message: data.message,
+            message: "出错了！",
           })
-        }
-      })
-      .catch((res) => {
-        ElNotification({
-          title: "错误",
-          type: "error",
-          message: "出错了！",
         })
+    } else {
+      ElNotification({
+        title: "警告",
+        type: "warning",
+        message: "输入信息不能为空！",
       })
+    }
   } else {
     //进入编辑状态
     isEdit.value = true
