@@ -4,7 +4,7 @@
       stripe
       style="width: 100%"
       table-layout="fixed"
-      :data="examinationsListStore.scores"
+      :data="userStore.user.role == 1 ? examinationsListStore.scores : personalScore"
     >
       <el-table-column label="姓名" prop="studentName" />
       <el-table-column
@@ -41,13 +41,14 @@
           <el-button
             type="primary"
             @click="handleEditButton(scope)"
-            v-if="!scope.row.isEdit"
+            v-if="!scope.row.isEdit && userStore.user.role == 1"
             >编辑</el-button
           >
           <el-button
             v-else
             type="primary"
             @click="handleSubmitButton(scope.row.studentNum)"
+            v-if="userStore.user.role == 1"
             >提交</el-button
           >
           <el-button v-if="scope.row.isEdit" @click="handleCancelButton(scope)"
@@ -74,10 +75,20 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, ref, reactive, computed, onMounted, getCurrentInstance } from "vue"
+import {
+  inject,
+  ref,
+  reactive,
+  computed,
+  onMounted,
+  getCurrentInstance,
+  onBeforeMount,
+} from "vue"
 import { useExaminationsListStore } from "@/stores/examinationsList"
 import { useSubjectsListStore } from "@/stores/subjectsList"
 import * as echarts from "echarts"
+import { useUserStore } from "@/stores/user"
+import { useStudentStore } from "@/stores/student"
 
 const axios = inject("axios")
 const props = defineProps(["examinationId"])
@@ -85,9 +96,22 @@ const examinationsListStore = useExaminationsListStore()
 
 const subjectsListStore = useSubjectsListStore()
 
+const userStore = useUserStore()
+const studentStore = useStudentStore()
+
+let personalScore
 onMounted(() => {
   subjectsListStore.refresh(axios)
 })
+
+if (userStore.user.role == 2) {
+  studentStore.refreshStudent(axios, userStore.user.id)
+  personalScore = computed(() =>
+    examinationsListStore.scores.filter(
+      (element) => element.studentNum == studentStore.student.studentNum
+    )
+  )
+}
 
 function handleScoreText(score) {
   return score != -1 ? score : "暂无数据"

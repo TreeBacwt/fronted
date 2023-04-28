@@ -27,7 +27,10 @@
         <template #title>
           <span class="text">{{ item.examinationName }}</span>
           <el-tag class="date-tag">{{ item.examinationDate.slice(0, 10) }}</el-tag>
-          <el-button class="echart-button" @click.stop="handleDialogShow(item.id)"
+          <el-button
+            class="echart-button"
+            @click.stop="handleDialogShow(item.id)"
+            v-if="userStore.user.role == 1"
             >成绩概览</el-button
           >
         </template>
@@ -67,12 +70,15 @@ import { useSubjectsListStore } from "@/stores/subjectsList"
 import ExaminationTable from "@/components/table/ExaminationTable.vue"
 import AddExaminationForm from "@/components/form/AddExaminationForm.vue"
 import * as echarts from "echarts"
+import { useUserStore } from "@/stores/user"
 
 const axios = inject("axios")
 const examinationsListStore = useExaminationsListStore()
 const examinationsList = computed(() => examinationsListStore.examinationsList)
 examinationsListStore.refresh(axios, examinationsListStore.currentPage)
 const subjectsListStore = useSubjectsListStore()
+const userStore = useUserStore()
+
 onMounted(() => {
   examinationsListStore.getTotal(axios)
   subjectsListStore.refresh(axios)

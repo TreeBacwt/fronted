@@ -17,6 +17,11 @@
         <template #title> 班级事务</template>
       </el-menu-item>
 
+      <el-menu-item index="scoresManagement" @click="handleItemClick">
+        <el-icon><EditPen /></el-icon>
+        <template #title>成绩查看</template>
+      </el-menu-item>
+
       <el-sub-menu index="votes" v-if="studentStore.student.isLeader == 1">
         <template #title>
           <el-icon><Finished /></el-icon>
