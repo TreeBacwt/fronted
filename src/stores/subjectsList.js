@@ -15,6 +15,9 @@ export const useSubjectsListStore = defineStore('subjectsList', () => {
             let data = res.data
             if (data.code == 1) {
                 subjectsList.value = data.data
+                subjectsList.value.forEach(element => {
+                    element["isEdit"] = false
+                });
                 data.data.forEach((subject) => {
                     //初始化编辑分数
                     updateScore[subject.id.toString()] = 0

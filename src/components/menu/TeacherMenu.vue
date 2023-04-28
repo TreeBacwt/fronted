@@ -31,10 +31,20 @@
         </el-menu-item>
       </el-sub-menu>
 
-      <el-menu-item index="scoresManagement" @click="handleItemClick">
-        <el-icon><EditPen /></el-icon>
-        <template #title>成绩管理</template>
-      </el-menu-item>
+      <el-sub-menu index="examination">
+        <template #title>
+          <el-icon><EditPen /></el-icon>
+          <span>考试管理</span>
+        </template>
+
+        <el-menu-item index="scoresManagement" @click="handleItemClick">
+          <template #title>成绩管理</template>
+        </el-menu-item>
+
+        <el-menu-item index="subjectManagement" @click="handleItemClick">
+          <template #title>课程管理</template>
+        </el-menu-item>
+      </el-sub-menu>
 
       <el-sub-menu index="questionnaire">
         <template #title>

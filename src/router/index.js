@@ -13,6 +13,7 @@ import { useUserStore } from '@/stores/user'
 import VotesManagement from '@/components/display/VotesManagement.vue'
 import NewVote from '@/components/display/NewVote.vue'
 import TeacherRegisterView from '@/views/TeacherRegisterView.vue'
+import SubjectManagement from '@/components/display/SubjectManagement.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -73,6 +74,11 @@ const router = createRouter({
         path: 'newVote',
         name: 'newVote',
         component: NewVote
+      },
+      {
+        path: 'subjectManagement',
+        name: 'subjectManagement',
+        component: SubjectManagement
       }]
     },
     {
