@@ -23,11 +23,11 @@ export const useStudentStore = defineStore('student', () => {
             if (data.code == 1) {
                 student.value = data.data
             } else {
-                ElNotification({
-                    title: '错误',
-                    type: 'error',
-                    message: data.message
-                })
+                // ElNotification({
+                //     title: '错误',
+                //     type: 'error',
+                //     message: data.message
+                // })
             }
         }).catch((res) => {
             ElNotification({
