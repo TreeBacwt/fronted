@@ -38,7 +38,7 @@
 
       <el-sub-menu index="questionnaire">
         <template #title>
-          <el-icon><Tickets /></el-icon>
+          <el-icon><ChatLineSquare /></el-icon>
           <span>问卷管理</span>
         </template>
         <el-menu-item index="newQuestionnaire" @click="handleItemClick">
@@ -76,6 +76,7 @@ import {
   Reading,
   Tickets,
   Finished,
+  ChatLineSquare,
 } from "@element-plus/icons-vue"
 import { useCollapseStore } from "@/stores/collapse"
 import { useRouter, useRoute } from "vue-router"

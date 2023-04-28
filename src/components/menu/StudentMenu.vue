@@ -53,6 +53,7 @@ import {
   Reading,
   Tickets,
   Finished,
+  ChatLineSquare,
 } from "@element-plus/icons-vue"
 import { useCollapseStore } from "@/stores/collapse"
 import { useStudentStore } from "@/stores/student"

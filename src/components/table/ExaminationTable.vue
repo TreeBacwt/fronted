@@ -89,6 +89,7 @@ import { useSubjectsListStore } from "@/stores/subjectsList"
 import * as echarts from "echarts"
 import { useUserStore } from "@/stores/user"
 import { useStudentStore } from "@/stores/student"
+import { useParentStore } from "@/stores/parent"
 
 const axios = inject("axios")
 const props = defineProps(["examinationId"])
@@ -98,6 +99,7 @@ const subjectsListStore = useSubjectsListStore()
 
 const userStore = useUserStore()
 const studentStore = useStudentStore()
+const parentStore = useParentStore()
 
 let personalScore
 onMounted(() => {
@@ -109,6 +111,13 @@ if (userStore.user.role == 2) {
   personalScore = computed(() =>
     examinationsListStore.scores.filter(
       (element) => element.studentNum == studentStore.student.studentNum
+    )
+  )
+} else if (userStore.user.role == 3) {
+  parentStore.refresh(axios, userStore.user.id)
+  personalScore = computed(() =>
+    examinationsListStore.scores.filter(
+      (element) => element.studentNum == parentStore.parent.studentNum
     )
   )
 }

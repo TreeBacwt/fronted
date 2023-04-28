@@ -12,13 +12,18 @@
         <template #title>个人信息</template>
       </el-menu-item>
 
+      <el-menu-item index="scoresManagement" @click="handleItemClick">
+        <el-icon><EditPen /></el-icon>
+        <template #title>成绩查看</template>
+      </el-menu-item>
+
       <el-menu-item index="classAffairsManagement" @click="handleItemClick">
         <el-icon><document /></el-icon>
         <template #title> 班级事务</template>
       </el-menu-item>
 
       <el-menu-item index="questionnaireManagement" @click="handleItemClick">
-        <el-icon><Tickets /></el-icon>
+        <el-icon><ChatLineSquare /></el-icon>
         <template #title>查看问卷</template>
       </el-menu-item>
     </el-menu>
@@ -36,6 +41,7 @@ import {
   EditPen,
   Reading,
   Tickets,
+  ChatLineSquare,
 } from "@element-plus/icons-vue"
 import { useCollapseStore } from "@/stores/collapse"
 import { useRouter, useRoute } from "vue-router"
