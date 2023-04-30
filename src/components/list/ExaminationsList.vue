@@ -10,7 +10,7 @@
       "
       v-model="examinationsListStore.activeItemName"
     >
-      <el-collapse-item name="edit">
+      <el-collapse-item name="edit" v-if="userStore.user.role == 1">
         <template #title>
           <el-tag class="date-tag" type="success">添加考试信息</el-tag>
         </template>
