@@ -185,6 +185,12 @@ function handleAddQuestionnaireButton() {
       type: "warning",
       message: "问卷信息不能为空！",
     })
+  } else if (questionnaireStore.newQuestions.length == 0) {
+    ElNotification({
+      title: "警告",
+      type: "warning",
+      message: "题目数量不能为零！",
+    })
   } else {
     let flag = true //options不能为空
     questionnaireStore.newQuestions.forEach((element) => {

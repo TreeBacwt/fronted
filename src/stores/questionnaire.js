@@ -101,7 +101,7 @@ export const useQuestionnaireStore = defineStore('questionnaire', () => {
                 unDoneQuestionnairesList.value = data.data
                 unDoneIsEmpty.value = false
             } else {
-                ElMessage.info(data.message)
+                //ElMessage.info(data.message)
                 unDoneQuestionnairesList.value = []
                 unDoneIsEmpty.value = true
             }
