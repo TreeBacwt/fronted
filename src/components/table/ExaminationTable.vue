@@ -301,6 +301,9 @@ let scoreOption = {
   yAxis: {
     type: "value",
   },
+  tooltip: {
+    trigger: "axis",
+  },
   series: [
     {
       data: [150, 230, 224, 218, 135, 147, 260],
